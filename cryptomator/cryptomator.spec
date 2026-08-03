@@ -1,14 +1,16 @@
 %global debug_package %{nil}
 
 # Keep these in sync with upstream packaging
-%global jdkver 25.0.2+10
-%global jdkver_url 25.0.2_10
-%global jdkmaj 25
-%global jfxver 25.0.2
+# NOTE: cryptomator's pom.xml sets <project.jdk.version>26</project.jdk.version>
+# and compiles with <release>26</release>, so the bundled build JDK must be >= 26.
+%global jdkver 26.0.2+10
+%global jdkver_url 26.0.2_10
+%global jdkmaj 26
+%global jfxver 25.0.3
 
 Name:           cryptomator
 Version:        1.19.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Multiplatform transparent client-side encryption for cloud storage
 
 License:        GPL-3.0-only
@@ -66,7 +68,7 @@ fi
 
 cd %{_builddir}/cryptomator-%{version}
 
-mvn -B clean package -DskipTests -Plinux
+mvn -B clean package -DskipTests
 
 cp LICENSE.txt target/
 cp target/cryptomator-*.jar target/mods/
@@ -167,5 +169,8 @@ update-mime-database %{_datadir}/mime &>/dev/null || :
 %{_datadir}/licenses/%{name}/
 
 %changelog
+* Mon Aug 03 2026 vitrasti <vitrasti@protonmail.com> - 1.19.3-2
+- Bundle Temurin JDK 26 to match upstream <project.jdk.version>26</project.jdk.version>
+
 * Mon Aug 03 2026 vitrasti <vitrasti@protonmail.com> - 1.19.3-1
 - Native build adapted from CachyOS/AUR cryptomator packaging
