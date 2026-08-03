@@ -2,7 +2,6 @@
 %global crate zed
 %global appid dev.zed.Zed
 
-# Reduce debuginfo size a bit
 %global rustflags_debuginfo 0
 
 Name:           zed
@@ -14,7 +13,8 @@ License:        Apache-2.0 AND GPL-3.0-or-later AND MIT AND BSD-2-Clause AND BSD
 URL:            https://zed.dev/
 Source0:        https://github.com/zed-industries/zed/archive/refs/tags/v%{version}.tar.gz
 
-BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  cargo
+BuildRequires:  rust
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  clang
@@ -47,8 +47,9 @@ and Tree-sitter. It is designed for speed and collaboration.
 %prep
 %autosetup -n %{crate}-%{version} -p1
 
-# Standard Fedora cargo prep (online builds are fine on COPR)
-%cargo_prep
+# Do NOT use %%cargo_prep – it forces offline mode and Zed needs git deps.
+# COPR has network enabled, so we let cargo fetch normally.
+mkdir -p .cargo
 
 # Generate .desktop and AppStream metadata
 export DO_STARTUP_NOTIFY="true"
@@ -71,16 +72,18 @@ envsubst < crates/zed/resources/flatpak/zed.metainfo.xml.in > %{appid}.metainfo.
 echo "stable" > crates/zed/RELEASE_CHANNEL
 export ZED_UPDATE_EXPLANATION="Update the zed package."
 
-%cargo_build -- --package zed --package cli
+# Online build (network is available on COPR)
+export CARGO_HOME=%{_builddir}/.cargo
+cargo build -j%{?_smp_ncpus_max}%{!?_smp_ncpus_max:4} \
+    --release \
+    --package zed \
+    --package cli
 
 %install
-# Main editor binary
-install -Dm755 target/rpm/zed %{buildroot}%{_libexecdir}/zed-editor
+# Binaries land in target/release/ with a normal --release build
+install -Dm755 target/release/zed %{buildroot}%{_libexecdir}/zed-editor
+install -Dm755 target/release/cli %{buildroot}%{_bindir}/zed
 
-# CLI launcher (this is what users run)
-install -Dm755 target/rpm/cli %{buildroot}%{_bindir}/zed
-
-# Desktop file + icon + AppStream
 install -Dm644 %{appid}.desktop %{buildroot}%{_datadir}/applications/%{appid}.desktop
 install -Dm644 crates/zed/resources/app-icon.png \
     %{buildroot}%{_datadir}/icons/hicolor/512x512/apps/%{appid}.png
