@@ -6,9 +6,16 @@ License:        MIT
 URL:            https://handy.computer/
 # Binary republish of the official Tauri-built RPM
 Source0:        https://github.com/cjpais/Handy/releases/download/v%{version}/Handy-%{version}-1.x86_64.rpm
-# For aarch64 builds change Source0 to Handy-%{version}-1.aarch64.rpm
-BuildArch:      x86_64
+# For aarch64 builds change Source0 to Handy-%%{version}-1.aarch64.rpm
+ExclusiveArch:  x86_64
 BuildRequires:  rpmdevtools
+BuildRequires:  cpio
+
+# Prebuilt binaries: skip debuginfo extraction and stripping
+%global debug_package %{nil}
+%global __brp_strip %{nil}
+%global __brp_strip_static_archive %{nil}
+%global __brp_strip_comment_note %{nil}
 
 # Explicit deps from tauri.conf.json + auto-detected ones
 Requires:       libgtk-layer-shell.so.0()(64bit)
