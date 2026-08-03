@@ -33,7 +33,6 @@ Requires:       alsa-lib
 Requires:       hicolor-icon-theme
 Requires:       libXtst
 Requires:       libXrender
-# libnet is unusual on Fedora; omit unless you hit a runtime dep
 
 Recommends:     libsecret
 
@@ -41,10 +40,6 @@ Recommends:     libsecret
 Cryptomator provides transparent, client-side encryption for your cloud storage.
 Files are encrypted before they leave your device (Dropbox, Google Drive,
 OneDrive, etc.).
-
-This package builds from source using the same approach as CachyOS/AUR:
-Maven build, then jlink + jpackage to produce a self-contained app image
-under /opt/cryptomator.
 
 %prep
 %setup -q -n cryptomator-%{version}
