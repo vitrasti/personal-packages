@@ -46,7 +46,9 @@ and Tree-sitter. It is designed for speed and collaboration.
 
 %prep
 %autosetup -n %{crate}-%{version} -p1
-%cargo_prep_online
+
+# Standard Fedora cargo prep (online builds are fine on COPR)
+%cargo_prep
 
 # Generate .desktop and AppStream metadata
 export DO_STARTUP_NOTIFY="true"
