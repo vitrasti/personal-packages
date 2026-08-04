@@ -72,6 +72,10 @@ envsubst < crates/zed/resources/flatpak/zed.metainfo.xml.in > %{appid}.metainfo.
 echo "stable" > crates/zed/RELEASE_CHANNEL
 export ZED_UPDATE_EXPLANATION="Update the zed package."
 
+# Compiled into the binary via option_env!("RELEASE_VERSION"); without it
+# `zed --version` and the About dialog report a blank version.
+export RELEASE_VERSION=%{version}
+
 # Online build (network is available on COPR)
 export CARGO_HOME=%{_builddir}/.cargo
 cargo build -j%{?_smp_ncpus_max}%{!?_smp_ncpus_max:4} \
