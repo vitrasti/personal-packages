@@ -8,9 +8,17 @@
 %global jdkmaj 26
 %global jfxver 25.0.3
 
+# Install under /usr/lib (not /opt) so the package layers cleanly on
+# rpm-ostree/immutable Fedora, where /opt is typically a symlink to /var/opt.
+%global instdir %{_prefix}/lib/%{name}
+
+# Bundled jpackage runtime + native libs must not become system Provides/Requires.
+%global __provides_exclude_from ^%{instdir}/.*$
+%global __requires_exclude_from ^%{instdir}/.*$
+
 Name:           cryptomator
 Version:        1.19.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Multiplatform transparent client-side encryption for cloud storage
 
 License:        GPL-3.0-only
@@ -140,13 +148,13 @@ install -Dm644 dist/linux/common/org.cryptomator.Cryptomator.tray-unlocked.svg \
   %{buildroot}%{_datadir}/icons/hicolor/symbolic/apps/org.cryptomator.Cryptomator.tray-unlocked-symbolic.svg
 
 # App image produced by jpackage
-install -dm755 %{buildroot}/opt
-cp -a target/cryptomator %{buildroot}/opt/
+install -dm755 %{buildroot}%{instdir}
+cp -a target/cryptomator/. %{buildroot}%{instdir}/
 
 install -Dm644 target/LICENSE.txt %{buildroot}%{_datadir}/licenses/%{name}/LICENSE.txt
 
 install -dm755 %{buildroot}%{_bindir}
-ln -s /opt/cryptomator/bin/cryptomator %{buildroot}%{_bindir}/cryptomator
+ln -s %{instdir}/bin/cryptomator %{buildroot}%{_bindir}/cryptomator
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -162,13 +170,16 @@ update-mime-database %{_datadir}/mime &>/dev/null || :
 
 %files
 %{_bindir}/cryptomator
-/opt/cryptomator/
+%{instdir}/
 %{_datadir}/applications/org.cryptomator.Cryptomator.desktop
 %{_datadir}/mime/packages/cryptomator-vault.xml
 %{_datadir}/icons/hicolor/*/apps/org.cryptomator.Cryptomator*
 %{_datadir}/licenses/%{name}/
 
 %changelog
+* Sat Aug 08 2026 vitrasti <vitrasti@protonmail.com> - 1.19.3-3
+- Install app image to /usr/lib/cryptomator instead of /opt for rpm-ostree compatibility
+
 * Mon Aug 03 2026 vitrasti <vitrasti@protonmail.com> - 1.19.3-2
 - Bundle Temurin JDK 26 to match upstream <project.jdk.version>26</project.jdk.version>
 
