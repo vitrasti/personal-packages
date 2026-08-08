@@ -1,11 +1,13 @@
 %global toolchain clang
 %global crate zed
 %global appid dev.zed.Zed
+# Avoid conflict with ZFS Event Daemon (/usr/sbin/zed); Arch uses the same name.
+%global binname zeditor
 
 %global rustflags_debuginfo 0
 
 Name:           zed
-Version:        1.13.2
+Version:        1.14.2
 Release:        1%{?dist}
 Summary:        High-performance, multiplayer code editor
 
@@ -56,7 +58,7 @@ export DO_STARTUP_NOTIFY="true"
 export APP_ID="%{appid}"
 export APP_ICON="%{appid}"
 export APP_NAME="Zed"
-export APP_CLI="zed"
+export APP_CLI="%{binname}"
 export APP="%{_libexecdir}/zed-editor"
 export APP_ARGS="%U"
 export ZED_UPDATE_EXPLANATION="Update the zed package."
@@ -86,7 +88,7 @@ cargo build -j%{?_smp_ncpus_max}%{!?_smp_ncpus_max:4} \
 %install
 # Binaries land in target/release/ with a normal --release build
 install -Dm755 target/release/zed %{buildroot}%{_libexecdir}/zed-editor
-install -Dm755 target/release/cli %{buildroot}%{_bindir}/zed
+install -Dm755 target/release/cli %{buildroot}%{_bindir}/%{binname}
 
 install -Dm644 %{appid}.desktop %{buildroot}%{_datadir}/applications/%{appid}.desktop
 install -Dm644 crates/zed/resources/app-icon.png \
@@ -96,12 +98,16 @@ install -Dm644 %{appid}.metainfo.xml %{buildroot}%{_metainfodir}/%{appid}.metain
 %files
 %doc README.md CODE_OF_CONDUCT.md
 %license LICENSE-APACHE LICENSE-GPL
-%{_bindir}/zed
+%{_bindir}/%{binname}
 %{_libexecdir}/zed-editor
 %{_datadir}/applications/%{appid}.desktop
 %{_datadir}/icons/hicolor/512x512/apps/%{appid}.png
 %{_metainfodir}/%{appid}.metainfo.xml
 
 %changelog
+* Sat Aug 08 2026 vitrasti <vitrasti@protonmail.com> - 1.14.2-1
+- Update to 1.14.2
+- Install CLI as zeditor to avoid conflict with ZFS Event Daemon (zed)
+
 * Mon Aug 03 2026 vitrasti <vitrasti@protonmail.com> - 1.13.2-1
 - Initial package for personal COPR
