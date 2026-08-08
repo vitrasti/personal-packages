@@ -8,6 +8,11 @@
 %global jdkmaj 26
 %global jfxver 25.0.3
 
+Name:           cryptomator
+Version:        1.19.3
+Release:        3%{?dist}
+Summary:        Multiplatform transparent client-side encryption for cloud storage
+
 # Install under /usr/lib (not /opt) so the package layers cleanly on
 # rpm-ostree/immutable Fedora, where /opt is typically a symlink to /var/opt.
 %global instdir %{_prefix}/lib/%{name}
@@ -15,11 +20,6 @@
 # Bundled jpackage runtime + native libs must not become system Provides/Requires.
 %global __provides_exclude_from ^%{instdir}/.*$
 %global __requires_exclude_from ^%{instdir}/.*$
-
-Name:           cryptomator
-Version:        1.19.3
-Release:        3%{?dist}
-Summary:        Multiplatform transparent client-side encryption for cloud storage
 
 License:        GPL-3.0-only
 URL:            https://cryptomator.org/
