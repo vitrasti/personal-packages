@@ -3,7 +3,7 @@
 
 Name: zellij
 Version: 0.44.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A terminal workspace with batteries included
 
 License: MIT
@@ -30,6 +30,12 @@ language that compiles to WebAssembly.
 
 %prep
 %autosetup
+# Fedora 45+/rawhide ships OpenSSL 4. Upstream's lockfile pins openssl-sys
+# 0.9.111, which only accepts OpenSSL <= 3.x. 0.9.114+ adds OpenSSL 4 support.
+# Keep F43/F44 on the locked deps unchanged.
+%if 0%{?fedora} >= 45
+cargo update -p openssl-sys --precise 0.9.117
+%endif
 
 %install
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3
@@ -50,6 +56,9 @@ rm -f %{buildroot}%{_prefix}/.crates.toml \
 %{_bindir}/%{name}
 
 %changelog
+* Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 0.44.1-3
+- Rawhide/F45+: bump openssl-sys to 0.9.117 for OpenSSL 4 compatibility
+
 * Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 0.44.1-2
 - Build against system libcurl/OpenSSL instead of vendored OpenSSL
 - Use cargo --locked for reproducible dependency resolution
