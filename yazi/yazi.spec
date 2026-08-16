@@ -75,12 +75,16 @@ cargo vendor
 
 %build
 export YAZI_GEN_COMPLETIONS=1
+# Release tarballs have no .git; skip vergen git SHA (sets VERGEN_GIT_SHA=no-gitcl).
+export YAZI_NO_GITCL=1
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
 %{cargo_vendor_manifest}
 
 %install
+# Same as %%build: ensure rebuilds during install also skip vergen git lookup.
+export YAZI_NO_GITCL=1
 cd yazi-cli
 %cargo_install
 cd ../yazi-fm
@@ -128,6 +132,7 @@ done
 %changelog
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
 - Update to 26.8.15
+- Set YAZI_NO_GITCL for tarball builds (new yazi-version/vergen)
 
 * Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 26.5.6-1
 - Initial release for personal copr repo.
