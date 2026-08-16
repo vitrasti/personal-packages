@@ -2,8 +2,8 @@
 %undefine _package_note_file
 
 Name: zellij
-Version: 0.44.1
-Release: 3%{?dist}
+Version: 0.44.3
+Release: 1%{?dist}
 Summary: A terminal workspace with batteries included
 
 License: MIT
@@ -56,6 +56,9 @@ rm -f %{buildroot}%{_prefix}/.crates.toml \
 %{_bindir}/%{name}
 
 %changelog
+* Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 0.44.3-1
+- Update to 0.44.3
+
 * Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 0.44.1-3
 - Rawhide/F45+: bump openssl-sys to 0.9.117 for OpenSSL 4 compatibility
 

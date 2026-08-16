@@ -7,7 +7,7 @@
 %global cargo_install_lib       0
 
 Name:           yazi
-Version:        26.5.6
+Version:        26.8.15
 Release:        1%{?dist}
 Summary:        Blazing fast terminal file manager
 
@@ -126,5 +126,8 @@ done
 %{zsh_completions_dir}/_%{name}
 
 %changelog
+* Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
+- Update to 26.8.15
+
 * Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 26.5.6-1
 - Initial release for personal copr repo.

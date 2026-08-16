@@ -3,8 +3,8 @@
 %global             debug_package %{nil}
 
 Name:               zen-browser
-Version:            1.21.10b
-Release:            2%{?dist}
+Version:            1.21.14b
+Release:            1%{?dist}
 Summary:            Zen Browser
 
 # Install under /usr/lib (not /opt) so the package layers cleanly on
@@ -68,6 +68,9 @@ gtk-update-icon-cache -f -t %{_datadir}/icons/hicolor
 %{instdir}/
 
 %changelog
+* Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 1.21.14b-1
+- Update to 1.21.14b
+
 * Sat Aug 08 2026 vitrasti <vitrasti@protonmail.com> - 1.21.10b-2
 - Install browser to /usr/lib/zen instead of /opt for rpm-ostree compatibility
 

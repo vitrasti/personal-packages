@@ -15,7 +15,7 @@
 %global __requires_exclude ^lib(EGL|GLESv2|ffmpeg|vk_swiftshader|vulkan)\.so.*$
 
 Name:           obsidian
-Version:        1.13.4
+Version:        1.13.7
 Release:        1%{?dist}
 Summary:        Knowledge base that works on a local folder of Markdown files
 
@@ -93,5 +93,8 @@ update-desktop-database -q %{_datadir}/applications &>/dev/null || :
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 1.13.7-1
+- Update to 1.13.7
+
 * Tue Aug 04 2026 vitrasti <vitrasti@protonmail.com> - 1.13.4-1
 - Initial package based on the official Arch Linux PKGBUILD

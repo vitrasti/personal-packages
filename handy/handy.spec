@@ -1,5 +1,5 @@
 Name:           handy
-Version:        0.9.4
+Version:        0.9.5
 Release:        1%{?dist}
 Summary:        Free, open-source, offline speech-to-text application
 License:        MIT
@@ -57,5 +57,8 @@ rpm2cpio %{SOURCE0} | cpio -idmv -D %{buildroot}
 /usr/share/icons/hicolor/256x256@2/apps/handy.png
 
 %changelog
+* Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 0.9.5-1
+- Update to 0.9.5
+
 * Tue Jul 21 2026 vitrasti <vitrasti@protonmail.com> - 0.9.4-1
 - Initial COPR package (binary republish of upstream Tauri RPM)
