@@ -16,8 +16,8 @@ URL:            https://github.com/anomalyco/opencode
 # Each tarball contains a single top-level binary named "opencode".
 Source0:        %{url}/releases/download/v%{version}/opencode-linux-x64.tar.gz#/%{name}-%{version}-linux-x64.tar.gz
 Source1:        %{url}/releases/download/v%{version}/opencode-linux-arm64.tar.gz#/%{name}-%{version}-linux-arm64.tar.gz
+# Local file in this package directory (must be committed next to the spec).
 Source2:        LICENSE
-Source3:        README.md
 
 ExclusiveArch:  x86_64 aarch64
 
@@ -46,7 +46,7 @@ releases (same approach as AUR opencode-bin).
 %ifarch aarch64
 %setup -q -c -n %{name}-%{version} -T -a 1
 %endif
-cp -a %{SOURCE2} %{SOURCE3} .
+cp -a %{SOURCE2} .
 
 %build
 # Prebuilt binary — nothing to compile.
@@ -70,7 +70,6 @@ chmod 0644 \
 
 %files
 %license LICENSE
-%doc README.md
 %{_bindir}/opencode
 %{_datadir}/bash-completion/completions/opencode
 %{_datadir}/zsh/site-functions/_opencode
