@@ -70,13 +70,12 @@ This package installs Zsh completion files for %{name}
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-# stdout is cargo source-replacement TOML (crates.io + git patches)
-cargo vendor > vendor-config.toml
-%cargo_prep -v vendor
-# %%cargo_prep only maps crates.io. yazi patches ratatui-core from git; without
-# that replacement, %%cargo_build --offline tries to clone GitHub and fails.
-awk '/^\[source\."git/{p=1} p{print} /^$/ && p{p=0}' vendor-config.toml >> .cargo/config.toml
-rm -f vendor-config.toml
+cargo vendor
+# -N: do not set [net] offline. 26.9.1 patches ratatui-core from git;
+# %%cargo_prep -v only remaps crates.io. Pointing that git crate at vendor/
+# makes cargo require --locked, which %%cargo_build (-Z avoid-dev-deps) does
+# not pass. COPR has enable_net, so cargo can fetch the one git crate.
+%cargo_prep -N -v vendor
 
 %build
 export YAZI_GEN_COMPLETIONS=1
@@ -137,7 +136,7 @@ done
 %changelog
 * Mon Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-1
 - Update to 26.9.1
-- Map vendored git crates so offline cargo builds work
+- Do not force cargo offline; 26.9.1 needs a git-patched ratatui-core
 
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
 - Update to 26.8.15
