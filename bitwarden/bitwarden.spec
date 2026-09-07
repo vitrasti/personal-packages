@@ -3,7 +3,7 @@
 # access during builds).
 
 Name:           bitwarden
-Version:        2026.7.0
+Version:        2026.8.0
 Release:        1%{?dist}
 Summary:        Bitwarden Desktop
 License:        GPL-3.0-only
@@ -39,7 +39,7 @@ Bitwarden Desktop repackaged for COPR.
 curl -L -o bitwarden.rpm "https://github.com/bitwarden/clients/releases/download/desktop-v%{version}/Bitwarden-%{version}-x86_64.rpm"
 # Pin the upstream RPM checksum. Update this on every version bump
 # (sha256sum Bitwarden-%{version}-x86_64.rpm).
-echo "528f413f8dc6c2ff9367135a9d7f012e0e63bf3f819272e225f9b98112f12594  bitwarden.rpm" | sha256sum -c -
+echo "5537e0ae5b1d3a2a3aff560362f6689d9f45c4584bb271e3cedff482f01f237a  bitwarden.rpm" | sha256sum -c -
 
 %install
 mkdir -p %{buildroot}
@@ -57,6 +57,10 @@ ln -sf /opt/Bitwarden/bitwarden %{buildroot}%{_bindir}/bitwarden
 /usr/share/icons/hicolor/*/apps/bitwarden.png
 
 %changelog
+* Sun Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.8.0-1
+- Update to 2026.8.0
+- Update pinned sha256 checksum for upstream RPM
+
 * Wed Aug 05 2026 vitrasti <vitrasti@protonmail.com> - 2026.7.0-1
 - Repackage upstream Bitwarden desktop 2026.7.0
 - Use SPDX license identifier (GPL-3.0-only)

@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name: zellij
-Version: 0.44.3
+Version: 0.45.1
 Release: 1%{?dist}
 Summary: A terminal workspace with batteries included
 
@@ -56,6 +56,9 @@ rm -f %{buildroot}%{_prefix}/.crates.toml \
 %{_bindir}/%{name}
 
 %changelog
+* Sun Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 0.45.1-1
+- Update to 0.45.1
+
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 0.44.3-1
 - Update to 0.44.3
 

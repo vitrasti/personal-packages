@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.8.12
+Version:        2026.9.1
 Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
@@ -74,6 +74,9 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Sun Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.9.1-1
+- Update to 2026.9.1
+
 * Mon Aug 24 2026 vitrasti <vitrasti@protonmail.com> - 2026.8.12-1
 - Initial release for personal copr repo.
 - Build without self_update for package/rpm-ostree managed upgrades
