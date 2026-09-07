@@ -70,8 +70,13 @@ This package installs Zsh completion files for %{name}
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-cargo vendor
+# stdout is cargo source-replacement TOML (crates.io + git patches)
+cargo vendor > vendor-config.toml
 %cargo_prep -v vendor
+# %%cargo_prep only maps crates.io. yazi patches ratatui-core from git; without
+# that replacement, %%cargo_build --offline tries to clone GitHub and fails.
+awk '/^\[source\."git/{p=1} p{print} /^$/ && p{p=0}' vendor-config.toml >> .cargo/config.toml
+rm -f vendor-config.toml
 
 %build
 export YAZI_GEN_COMPLETIONS=1
@@ -130,8 +135,9 @@ done
 %{zsh_completions_dir}/_%{name}
 
 %changelog
-* Sun Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-1
+* Mon Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-1
 - Update to 26.9.1
+- Map vendored git crates so offline cargo builds work
 
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
 - Update to 26.8.15
