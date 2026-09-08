@@ -4,7 +4,6 @@
 %global __brp_mangle_shebangs   /usr/bin/true
 %global _default_patch_fuzz     2
 %global build_cflags            %{build_cflags} -std=gnu17
-%global cargo_install_lib       0
 
 Name:           yazi
 Version:        26.9.1
@@ -71,11 +70,13 @@ This package installs Zsh completion files for %{name}
 %prep
 %autosetup -n %{name}-%{version} -p1
 cargo vendor
-# -N: do not set [net] offline. 26.9.1 patches ratatui-core from git;
-# %%cargo_prep -v only remaps crates.io. Pointing that git crate at vendor/
-# makes cargo require --locked, which %%cargo_build (-Z avoid-dev-deps) does
-# not pass. COPR has enable_net, so cargo can fetch the one git crate.
-%cargo_prep -N -v vendor
+%cargo_prep -v vendor
+# -v always sets [net] offline=true and cannot be combined with -N.
+# 26.9.1 patches ratatui-core from git; leave that crate on GitHub (COPR
+# enable_net) instead of remapping it onto vendor/.
+for f in .cargo/config.toml .cargo/config; do
+    [ -f "$f" ] && sed -i 's/^offline = true$/offline = false/' "$f"
+done
 
 %build
 export YAZI_GEN_COMPLETIONS=1
@@ -87,13 +88,10 @@ export YAZI_NO_GITCL=1
 %{cargo_vendor_manifest}
 
 %install
-# Same as %%build: ensure rebuilds during install also skip vergen git lookup.
-export YAZI_NO_GITCL=1
-cd yazi-cli
-%cargo_install
-cd ../yazi-fm
-%cargo_install
-cd ..
+# Copy artifacts from %%cargo_build. %%cargo_install passes --offline and would
+# fail to fetch the git-patched ratatui-core even with [net] offline=false.
+install -Dpm755 target/rpm/ya %{buildroot}%{_bindir}/ya
+install -Dpm755 target/rpm/%{name} %{buildroot}%{_bindir}/%{name}
 
 install -Dpm644 yazi-boot/completions/%{name}.bash %{buildroot}%{bash_completions_dir}/%{name}
 install -Dpm644 yazi-boot/completions/%{name}.fish %{buildroot}%{fish_completions_dir}/%{name}.fish
@@ -136,7 +134,7 @@ done
 %changelog
 * Mon Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-1
 - Update to 26.9.1
-- Do not force cargo offline; 26.9.1 needs a git-patched ratatui-core
+- Allow network for git-patched ratatui-core (%%cargo_prep -v is always offline)
 
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
 - Update to 26.8.15
