@@ -7,7 +7,7 @@
 
 Name:           yazi
 Version:        26.9.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Blazing fast terminal file manager
 
 License:        BSD-2-Clause AND (0BSD OR MIT OR Apache-2.0) AND (MIT OR Zlib OR Apache-2.0) AND Unicode-3.0 AND (MIT OR Apache-2.0) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (MIT OR Apache-2.0 OR Zlib) AND MIT AND (MIT OR Apache-2.0 OR NCSA) AND (Apache-2.0 OR BSL-1.0) AND (Unlicense OR MIT) AND Apache-2.0 AND (CC0-1.0 OR Apache-2.0) AND BSD-3-Clause AND MPL-2.0 AND ISC AND Zlib AND ((MIT OR Apache-2.0) AND Unicode-3.0) AND (Apache-2.0 WITH LLVM-exception) AND (Apache-2.0 OR MIT) AND CC0-1.0 AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Zlib OR Apache-2.0 OR MIT) AND BSL-1.0
@@ -16,7 +16,8 @@ SourceLicense:  MIT
 URL:            https://github.com/sxyazi/yazi
 Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  cargo-rpm-macros >= 25
+BuildRequires:  rust >= 1.95.0
 BuildRequires:  gcc
 BuildRequires:  ImageMagick
 BuildRequires:  make
@@ -69,14 +70,15 @@ This package installs Zsh completion files for %{name}
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-cargo vendor
+# COPR needs network access here; keep the versions and git revision in Cargo.lock.
+cargo vendor --locked
+# Fedora's vendor configuration only replaces crates.io, not git sources.
+# Keep upstream's ratatui-core fix, using the copy vendored from the locked commit.
+sed -i 's|^ratatui-core = { git = "https://github.com/yazi-rs/ratatui.git", branch = "fix_buffer_diff_wide_cells" }$|ratatui-core = { path = "vendor/ratatui-core" }|' Cargo.toml
+grep -Fxq 'ratatui-core = { path = "vendor/ratatui-core" }' Cargo.toml
 %cargo_prep -v vendor
-# -v always sets [net] offline=true and cannot be combined with -N.
-# 26.9.1 patches ratatui-core from git; leave that crate on GitHub (COPR
-# enable_net) instead of remapping it onto vendor/.
-for f in .cargo/config.toml .cargo/config; do
-    [ -f "$f" ] && sed -i 's/^offline = true$/offline = false/' "$f"
-done
+# Refresh the git-to-path lock entry only after enabling the vendored sources.
+cargo update --offline -p ratatui-core
 
 %build
 export YAZI_GEN_COMPLETIONS=1
@@ -86,10 +88,12 @@ export YAZI_NO_GITCL=1
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
 %{cargo_vendor_manifest}
+# The manifest generator excludes path dependencies; include the patched crate.
+printf '%s\n' 'ratatui-core v0.1.2' >> cargo-vendor.txt
 
 %install
-# Copy artifacts from %%cargo_build. %%cargo_install passes --offline and would
-# fail to fetch the git-patched ratatui-core even with [net] offline=false.
+# Non-crate workspace: Fedora Rust guidelines say not to use %%cargo_install;
+# copy binaries from the rpm profile used by %%cargo_build.
 install -Dpm755 target/rpm/ya %{buildroot}%{_bindir}/ya
 install -Dpm755 target/rpm/%{name} %{buildroot}%{_bindir}/%{name}
 
@@ -132,9 +136,14 @@ done
 %{zsh_completions_dir}/_%{name}
 
 %changelog
+* Tue Sep 08 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-2
+- Vendor locked dependencies and resolve the ratatui-core path patch offline
+- Keep prep offline without the failing optional-config loop
+- Include the patched ratatui-core in bundled dependency metadata
+
 * Mon Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 26.9.1-1
 - Update to 26.9.1
-- Allow network for git-patched ratatui-core (%%cargo_prep -v is always offline)
+- Use vendored path patch for git ratatui-core; install from target/rpm
 
 * Sun Aug 16 2026 vitrasti <vitrasti@protonmail.com> - 26.8.15-1
 - Update to 26.8.15
