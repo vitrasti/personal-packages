@@ -147,6 +147,4 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 
 %changelog
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 0.21.4-1
-- Update to upstream v2026.9.21 (0.21.4)
-- Personal COPR packaging for Fedora CoreOS / Kinoite
-- Allow Python 3.14, unpin Fedora-satisfiable deps, refuse hermes update
+- Initial release for personal copr repo.
