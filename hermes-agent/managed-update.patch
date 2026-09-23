@@ -1,0 +1,68 @@
+--- a/hermes_cli/config.py
++++ b/hermes_cli/config.py
+@@ -319,7 +319,7 @@
+ # "apt" is the Termux APT distribution identifier, not a generic Debian/Ubuntu signal; another
+ # APT distribution needs its own method. "home-manager" is listed because the managed marker can
+ # return it and a stamp must name every method this function returns.
+-_SUPPORTED_INSTALL_METHODS = frozenset({"apt", "docker", "nix", "nixos", "home-manager", "git", "unknown"})
++_SUPPORTED_INSTALL_METHODS = frozenset({"apt", "docker", "nix", "nixos", "home-manager", "git", "rpm", "unknown"})
+ 
+ 
+ def _install_method_stamp(path: Path) -> Optional[str]:
+@@ -396,6 +396,7 @@
+ _UPDATE_COMMAND_BY_METHOD = {
+     "docker": "docker pull nousresearch/hermes-agent:latest",
+     "apt": "pkg upgrade hermes-agent",  # "apt" == Termux APT by contract; uses Termux's `pkg`.
++    "rpm": "sudo rpm-ostree upgrade",
+ }
+ 
+ 
+--- a/hermes_cli/update_contract.py
++++ b/hermes_cli/update_contract.py
+@@ -32,7 +32,18 @@
+     if message is not None:
+         text = message(command)
+     else:
+-        text = format_docker_update_message() if method == "docker" else command
++        if method == "docker":
++            text = format_docker_update_message()
++        elif method == "rpm":
++            text = (
++                "Cannot update Hermes Agent: this installation is managed by RPM.\n"
++                "On Fedora Kinoite / rpm-ostree:\n"
++                "  sudo rpm-ostree upgrade\n"
++                "On Fedora CoreOS / bootc, rebuild the image with a newer hermes-agent, then:\n"
++                "  sudo bootc upgrade"
++            )
++        else:
++            text = command
+     return UpdateRefusal(code=code, message=text, update_command=command)
+ 
+ 
+@@ -68,8 +79,8 @@
+         method = detect_install_method(project_root)
+         if method == "docker":
+             return _refusal("docker", method)
+-        if is_nix_install_method(method) or method == "apt":
+-            return _refusal(method if method == "apt" else "nix", method)
++        if is_nix_install_method(method) or method in ("apt", "rpm"):
++            return _refusal("rpm" if method == "rpm" else method if method == "apt" else "nix", method)
+     except Exception as exc:
+         logger.debug("Install-method admission check failed: %s", exc)
+     return None
+--- a/hermes_cli/main.py
++++ b/hermes_cli/main.py
+@@ -2288,6 +2288,13 @@
+ 
+     if not getattr(args, "yes", False):
+         _require_tty("uninstall")
++    from hermes_cli.config import detect_install_method
++
++    if detect_install_method() == "rpm":
++        print("Cannot uninstall Hermes Agent: this installation is managed by RPM.")
++        print("On Fedora Kinoite: sudo rpm-ostree uninstall hermes-agent")
++        print("On Fedora CoreOS / bootc: rebuild the image without the package.")
++        return
+     from hermes_cli.uninstall import run_uninstall
+ 
+     run_uninstall(args)
