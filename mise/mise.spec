@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.9.1
+Version:        2026.9.12
 Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
@@ -74,6 +74,9 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 2026.9.12-1
+- Update to 2026.9.12
+
 * Sun Sep 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.9.1-1
 - Update to 2026.9.1
 
