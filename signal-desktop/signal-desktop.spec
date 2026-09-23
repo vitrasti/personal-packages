@@ -1,6 +1,6 @@
 Name:		signal-desktop
 Version:	8.27.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Private messaging from your desktop
 License:	GPLv3
 URL:		https://github.com/signalapp/Signal-Desktop/
@@ -8,7 +8,7 @@ URL:		https://github.com/signalapp/Signal-Desktop/
 Source0:	https://github.com/signalapp/Signal-Desktop/archive/v%{version}.tar.gz
 Source1:	nan+2.22.2.patch
 
-BuildRequires: binutils git gcc gcc-c++ openssl-devel bsdtar jq zlib xz ca-certificates git-lfs ruby-devel python-unversioned-command yarnpkg npm python3 libxcrypt-compat vips-devel pulseaudio-libs
+BuildRequires: binutils git gcc gcc-c++ openssl-devel bsdtar jq zlib xz ca-certificates git-lfs ruby-devel python-unversioned-command npm python3 libxcrypt-compat vips-devel pulseaudio-libs
 
 AutoReqProv: no
 Provides: signal-desktop
@@ -124,6 +124,9 @@ done
 %{_datadir}/*
 
 %changelog
+* Thu Sep 24 2026 vitrasti <vitrasti@protonmail.com> - 8.27.0-2
+- Drop unused yarnpkg BuildRequires (retired from Fedora 46/rawhide)
+
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 8.27.0-1
 - Update to 8.27.0
 
