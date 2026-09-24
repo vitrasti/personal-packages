@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+# Wrapper modeled on AUR brave-bin. Extra flags can be added, one per line, in
+# ~/.config/brave-flags.conf (comments and blank lines are ignored).
+
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+CONF_FILE="${XDG_CONFIG_HOME}/brave-flags.conf"
+
+FLAG_LIST=()
+if test -f "${CONF_FILE}"; then
+	mapfile -t CONF_LIST < "${CONF_FILE}"
+	for CONF_LINE in "${CONF_LIST[@]}"; do
+		if ! [[ "${CONF_LINE}" =~ ^[[:space:]]*(#|$) ]]; then
+			FLAG_LIST+=("${CONF_LINE}")
+		fi
+	done
+fi
+
+export CHROME_WRAPPER="$(readlink -f "$0")"
+export CHROME_VERSION_EXTRA=stable
+
+exec /usr/lib/brave-browser/brave "${FLAG_LIST[@]}" "$@"
