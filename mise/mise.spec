@@ -76,8 +76,6 @@ TOML
 %changelog
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 2026.9.18-1
 - Update to 2026.9.18
-- Include shared config from git repositories or OCI registries
-- Require trust before inline tool options are applied
 
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 2026.9.12-1
 - Update to 2026.9.12

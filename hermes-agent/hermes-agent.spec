@@ -147,8 +147,7 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 
 %changelog
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 0.21.5-1
-- Update to 0.21.5 (upstream tag v2026.9.24)
-- Patch rollup of changes since v0.21.4
+- Update to 0.21.5
 
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 0.21.4-1
 - Initial release for personal copr repo.

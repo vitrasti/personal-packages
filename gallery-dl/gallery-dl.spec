@@ -83,8 +83,6 @@ fish command line completion support for %{name}.
 %changelog
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 1.32.14-1
 - Update to 1.32.14
-- Add xasiat video and Steam screenshots/artwork extractors
-- Fix Behance 403 errors and Instagram story/highlight extraction
 
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 1.32.13-1
 - Update to 1.32.13

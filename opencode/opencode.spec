@@ -77,8 +77,6 @@ chmod 0644 \
 %changelog
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 1.18.33-1
 - Update to 1.18.33
-- Honor provider timeouts for Cloudflare AI Gateway
-- Report MCP browser launch failures and redact debug config secrets
 
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 1.18.32-1
 - Update to 1.18.32

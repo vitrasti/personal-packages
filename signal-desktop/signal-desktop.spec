@@ -126,7 +126,6 @@ done
 %changelog
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 8.28.0-1
 - Update to 8.28.0
-- Bug fixes and performance improvements
 
 * Thu Sep 24 2026 vitrasti <vitrasti@protonmail.com> - 8.27.0-2
 - Drop unused yarnpkg BuildRequires (retired from Fedora 46/rawhide)
