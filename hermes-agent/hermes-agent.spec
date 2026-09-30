@@ -1,9 +1,9 @@
 # Personal COPR package. Version is bumped by hand.
-# Upstream GitHub tag is v2026.9.21 (pyproject version 0.21.4).
-%global tag_version 2026.9.21
+# Upstream GitHub tag is v2026.9.24 (pyproject version 0.21.5).
+%global tag_version 2026.9.24
 
 Name:           hermes-agent
-Version:        0.21.4
+Version:        0.21.5
 Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
@@ -146,5 +146,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_datadir}/hermes-agent/
 
 %changelog
+* Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 0.21.5-1
+- Update to 0.21.5 (upstream tag v2026.9.24)
+- Patch rollup of changes since v0.21.4
+
 * Wed Sep 23 2026 vitrasti <vitrasti@protonmail.com> - 0.21.4-1
 - Initial release for personal copr repo.

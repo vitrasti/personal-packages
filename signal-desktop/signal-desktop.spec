@@ -1,6 +1,6 @@
 Name:		signal-desktop
-Version:	8.27.0
-Release:	2%{?dist}
+Version:	8.28.0
+Release:	1%{?dist}
 Summary:	Private messaging from your desktop
 License:	GPLv3
 URL:		https://github.com/signalapp/Signal-Desktop/
@@ -124,6 +124,10 @@ done
 %{_datadir}/*
 
 %changelog
+* Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 8.28.0-1
+- Update to 8.28.0
+- Bug fixes and performance improvements
+
 * Thu Sep 24 2026 vitrasti <vitrasti@protonmail.com> - 8.27.0-2
 - Drop unused yarnpkg BuildRequires (retired from Fedora 46/rawhide)
 
