@@ -52,7 +52,7 @@ cd %{_builddir}/Signal-Desktop-%{version}
 NODE_VERSION=`cat .nvmrc`
 NVM_VERSION=0.40.2
 NVM_DIR=$HOME/.nvm/
-PNPM_VERSION=`grep packageManager package.json | cut -f2 -d':' |tr -d ','| tr -d '"'|tr -d ' '`
+PNPM_VERSION=$(sed -n 's/^[[:space:]]*"packageManager": "\([^"]*\)".*/\1/p' package.json)
 
 export NODE_VERSION NVM_VERSION NVM_DIR
 
