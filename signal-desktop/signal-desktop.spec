@@ -52,7 +52,7 @@ cd %{_builddir}/Signal-Desktop-%{version}
 NODE_VERSION=`cat .nvmrc`
 NVM_VERSION=0.40.2
 NVM_DIR=$HOME/.nvm/
-PNPM_VERSION=$(sed -n 's/^[[:space:]]*"packageManager": "\([^"]*\)".*/\1/p' package.json)
+PNPM_VERSION=$(jq -er '.devEngines.packageManager.version' package.json)
 
 export NODE_VERSION NVM_VERSION NVM_DIR
 
@@ -71,7 +71,7 @@ PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 export NODE_PATH PATH
 
 # Install pnpm
-npm install -g $PNPM_VERSION
+npm install -g "pnpm@$PNPM_VERSION"
 
 # the following commands are taken from reproducible-builds/docker-entrypoint.sh
 pnpm install --frozen-lockfile
