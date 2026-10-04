@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           qbt-tui
-Version:        0.1.5
+Version:        0.1.6
 Release:        1%{?dist}
 Summary:        Terminal user interface for qBittorrent
 
@@ -63,6 +63,9 @@ install -Dpm0755 qbt-tui %{buildroot}%{_bindir}/qbt-tui
 %{_bindir}/qbt-tui
 
 %changelog
+* Sun Oct 04 2026 vitrasti <vitrasti@protonmail.com> - 0.1.6-1
+- Update to 0.1.6
+
 * Fri Sep 25 2026 vitrasti <vitrasti@protonmail.com> - 0.1.5-1
 - Initial package for personal COPR
 - Based on AUR qbittorrent-tui-bin / upstream goreleaser Linux tarballs

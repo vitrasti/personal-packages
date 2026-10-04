@@ -7,7 +7,7 @@
 %global rustflags_debuginfo 0
 
 Name:           zed
-Version:        1.21.0
+Version:        1.22.0
 Release:        1%{?dist}
 Summary:        High-performance, multiplayer code editor
 
@@ -105,6 +105,9 @@ install -Dm644 %{appid}.metainfo.xml %{buildroot}%{_metainfodir}/%{appid}.metain
 %{_metainfodir}/%{appid}.metainfo.xml
 
 %changelog
+* Sun Oct 04 2026 vitrasti <vitrasti@protonmail.com> - 1.22.0-1
+- Update to 1.22.0
+
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 1.21.0-1
 - Update to 1.21.0
 

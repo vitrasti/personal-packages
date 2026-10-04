@@ -1,7 +1,7 @@
 %global srcname qbittorrent-api
 
 Name:           python-qbittorrent-api
-Version:        2026.8.1
+Version:        2026.10.0
 Release:        %autorelease
 Summary:        Python client for the qBittorrent Web API
 

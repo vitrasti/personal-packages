@@ -1,5 +1,5 @@
 Name:           gallery-dl
-Version:        1.32.14
+Version:        1.32.15
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 Summary:        Command-line program to download image galleries and collections
@@ -81,6 +81,9 @@ fish command line completion support for %{name}.
 
 
 %changelog
+* Sun Oct 04 2026 vitrasti <vitrasti@protonmail.com> - 1.32.15-1
+- Update to 1.32.15
+
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 1.32.14-1
 - Update to 1.32.14
 
