@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           pi
-Version:        1.0.2
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        AI coding agent CLI with read, bash, edit, write tools and session management
 
@@ -74,6 +74,9 @@ ln -s ../%{_lib}/pi/pi %{buildroot}%{_bindir}/pi
 %{_bindir}/pi
 
 %changelog
+* Tue Oct 06 2026 vitrasti <vitrasti@protonmail.com> - 1.0.4-1
+- Update to 1.0.4
+
 * Sun Oct 04 2026 vitrasti <vitrasti@protonmail.com> - 1.0.2-1
 - Initial package for personal COPR
 - Based on AUR pi-coding-agent-bin packaging
