@@ -1,0 +1,15 @@
+--- a/huggingface_hub/cli/system.py
++++ b/huggingface_hub/cli/system.py
+@@ -38,6 +38,12 @@
+ 
+ def update() -> None:
+     """Update the `hf` CLI to the latest version."""
++    out.error(
++        "This installation is managed by RPM. Update huggingface-cli through "
++        "DNF on Fedora, rpm-ostree on layered systems, or your CoreOS/bootc "
++        "OS image update workflow."
++    )
++    raise click.exceptions.Exit(code=1)
+     from ._skills import DEFAULT_SKILL_ID, _installed_hf_cli_dirs
+ 
+     out.text(f"Current version: {__version__}")
