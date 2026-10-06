@@ -11,7 +11,7 @@
 
 Name:           llama-cpp-vulkan
 Version:        0.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Local LLM inference tools and HTTP server with Vulkan acceleration
 # Includes bundled C/C++ code and the compiled, locked upstream Web UI.
 License:        MIT AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND 0BSD AND Zlib AND CC0-1.0 AND Unlicense AND OFL-1.1 AND BlueOak-1.0.0 AND MPL-2.0 AND LGPL-3.0-or-later AND Python-2.0 AND CC-BY-4.0
@@ -61,6 +61,8 @@ application container, pass /dev/dri through to the container as well.
 # Hugging Face or silently produce a server without its embedded Web UI.
 export npm_config_cache="$PWD/.npm-cache"
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+# Non-interactive mode avoids the PWA asset generator crash in RPM builds.
+export CI=1
 pushd tools/ui
 npm ci --no-audit --no-fund
 LLAMA_UI_OUT_DIR="$PWD/dist" \
@@ -163,6 +165,9 @@ PY
 %{privlibdir}/lib*.so*
 
 %changelog
+* Tue Oct 06 2026 vitrasti <vitrasti@protonmail.com> - 0.6.0-2
+- Use CI mode to avoid the Web UI asset generator crash in COPR builds
+
 * Tue Oct 06 2026 vitrasti <vitrasti@protonmail.com> - 0.6.0-1
 - Initial source build with Vulkan, Intel Mesa drivers and portable CPU backends
 - Include llama-server with the embedded Web UI from locked upstream sources
