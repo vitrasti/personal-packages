@@ -3,7 +3,7 @@
 
 Name:           mise
 Version:        2026.10.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
 License:        MIT
@@ -27,6 +27,12 @@ from the same configuration.
 %autosetup
 
 %install
+# aws-lc-sys 0.45.0's cc-builder -O0 guard for jitterentropy-base.c is broken
+# under cc 1.6.0 (env is snapshotted before the CFLAGS override applies), so
+# mock's -O2 CFLAGS wins and trips the file's hard #error. Disable the CPU
+# jitter entropy source: on Linux AWS-LC seeds its CSPRNG from getrandom(2),
+# so nothing is lost.
+export AWS_LC_SYS_NO_JITTER_ENTROPY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3
 # Drop self_update so package/rpm-ostree owns upgrades (required on immutable
 # Fedora CoreOS where /usr cannot be rewritten in place). Keep the rest of the
@@ -74,6 +80,11 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Wed Oct 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.4-2
+- Disable CPU jitter entropy (AWS_LC_SYS_NO_JITTER_ENTROPY=1): the
+  aws-lc-sys 0.45.0 -O0 guard is broken under cc 1.6.0, which broke the
+  build with mock's -O2 CFLAGS. Linux seeds from getrandom(2) instead.
+
 * Wed Oct 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.4-1
 - Update to 2026.10.4
 
