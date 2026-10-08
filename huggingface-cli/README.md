@@ -1,6 +1,6 @@
 # Hugging Face CLI for Fedora / Fedora CoreOS
 
-This x86_64 RPM provides `hf` from `huggingface-hub` 2.1.1. It targets Fedora 44,
+This x86_64 RPM provides `hf` from `huggingface-hub` 2.2.0. It targets Fedora 44,
 Fedora 43 and Rawhide, using each release's system Python. Application dependencies
 are hash-pinned in `requirements.txt` and installed privately under
 `/usr/lib64/huggingface-cli/site-packages`. They do not provide or replace system
@@ -67,7 +67,7 @@ PyYAML pin on Linux x86_64 / Python 3.13 (the minimum supported Python):
 uv pip compile - --python-version 3.13 \
   --python-platform x86_64-manylinux_2_28 --generate-hashes \
   --no-annotate --no-header --output-file requirements.txt <<'EOF'
-huggingface-hub==2.1.1
+huggingface-hub==2.2.0
 pyyaml==6.0.3
 EOF
 ```

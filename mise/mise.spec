@@ -2,8 +2,8 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.10.4
-Release:        2%{?dist}
+Version:        2026.10.5
+Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
 License:        MIT
@@ -80,6 +80,9 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Fri Oct 09 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.5-1
+- Update to 2026.10.5
+
 * Wed Oct 07 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.4-2
 - Disable CPU jitter entropy (AWS_LC_SYS_NO_JITTER_ENTROPY=1): the
   aws-lc-sys 0.45.0 -O0 guard is broken under cc 1.6.0, which broke the

@@ -11,7 +11,7 @@
 %global __brp_mangle_shebangs_exclude_from ^%{appdir}/hf[.]py$
 
 Name:           huggingface-cli
-Version:        2.1.1
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Hugging Face Hub CLI with private Python dependencies
 # First-party license and bundled Python dependencies. Native hf-xet ships an SBOM.
@@ -126,6 +126,9 @@ install -Dpm0644 hf.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/hf.fi
 %{_datadir}/fish/vendor_completions.d/hf.fish
 
 %changelog
+* Fri Oct 09 2026 vitrasti <vitrasti@protonmail.com> - 2.2.0-1
+- Update to huggingface-hub 2.2.0
+
 * Tue Oct 06 2026 vitrasti <vitrasti@protonmail.com> - 2.1.1-1
 - Initial x86_64 package with hash-pinned private dependencies
 - Support immutable Fedora installations and RPM-managed updates
