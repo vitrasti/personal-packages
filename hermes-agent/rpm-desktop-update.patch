@@ -1,0 +1,18 @@
+--- a/apps/desktop/scripts/write-build-stamp.mjs
++++ b/apps/desktop/scripts/write-build-stamp.mjs
+@@ -258,3 +258,6 @@
+   if (!updateMechanism) throw new Error(`Unknown desktop variant: ${variant}`)
++  // The RPM owns the Electron app and system Python backend, not the
++  // source-checkout updater used by the normal unbundled desktop build.
++  const managedUpdateMechanism = env.HERMES_RPM_BUILD === '1' ? 'external' : updateMechanism
+   if (channelBuild && updateMechanism === 'external') throw new Error('Channel builds require a supported native update owner')
+   const bundled = variant === 'bundled' || variant === 'store'
+@@ -266,7 +269,7 @@
+     payload: variant === "store" ? "bundled" : variant || "bootstrap",
+     distribution: "desktop-app",
+ 
+-    updateMechanism: commitBuild ? 'external' : updateMechanism,
++    updateMechanism: commitBuild ? 'external' : managedUpdateMechanism,
+     tag: channelBuild?.receiverCandidate ? channelBuild.releaseTag : env.HERMES_PAYLOAD_TAG || null,
+     ...(bundleEnv ? { bundleEnv } : {}),
+     ...(bundled ? { runtime: payload.runtime } : {})
