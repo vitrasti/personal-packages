@@ -10,8 +10,8 @@ License:        MIT
 URL:            https://github.com/NousResearch/hermes-agent
 Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        hermes.sh
-# Relax exact PyPI pins and requires-python so Fedora 44 (Python 3.14) can
-# satisfy %%pyproject_buildrequires. Drop core deps that are not in Fedora.
+# Relax exact PyPI pins so Fedora can satisfy %%pyproject_buildrequires.
+# Drop core deps that are not in Fedora.
 Patch0:         relax-deps.patch
 # Teach upstream's install-method detector about RPM/ostree and refuse
 # in-place `hermes update` / `hermes uninstall`.
@@ -31,6 +31,7 @@ BuildRequires:  python3dist(wheel)
 # cannot see .dist-info because the payload is installed outside sitelib.
 Requires:       python3dist(openai)
 Requires:       python3dist(certifi)
+Requires:       python3dist(truststore)
 Requires:       python3dist(python-dotenv)
 Requires:       python3dist(fire)
 Requires:       python3dist(httpx)
@@ -38,7 +39,7 @@ Requires:       python3dist(httpx)
 Requires:       python3dist(socksio)
 Requires:       python3dist(rich)
 Requires:       python3dist(tenacity)
-Requires:       python3dist(pyyaml)
+Requires:       python3dist(tomli-w)
 Requires:       python3dist(ruamel-yaml)
 Requires:       python3dist(requests)
 Requires:       python3dist(jinja2)
@@ -147,6 +148,7 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %changelog
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-1
 - Update to 0.21.6
+- Refresh relax-deps.patch for upstream dependency markers
 
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 0.21.5-1
 - Update to 0.21.5
