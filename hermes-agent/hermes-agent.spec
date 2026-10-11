@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.21.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -21,14 +21,22 @@ Patch1:         managed-update.patch
 Patch2:         python315-compat.patch
 # Make the RPM-built Electron artifact use external package updates.
 Patch3:         rpm-desktop-update.patch
+# Skip renderer minification and gzip size reports to cut peak build memory.
+Patch4:         vite-low-memory.patch
 
 ExclusiveArch:  x86_64
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(wheel)
+%if 0%{?fedora} >= 44
 BuildRequires:  nodejs22-bin >= 1:22.22.0
 BuildRequires:  nodejs22-npm-bin
 # Upstream accepts npm <11.10.0 or >=11.17.0; Fedora's Node 22 uses npm 10.
 BuildRequires:  nodejs22-npm < 1:11.10.0
+%else
+# F43 ships Node 22 as the mainline nodejs package.
+BuildRequires:  nodejs >= 1:22.22.0
+BuildRequires:  nodejs-npm
+%endif
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  libX11-devel
@@ -108,6 +116,7 @@ The x86_64 package also contains a prebuilt Electron desktop app. Run
 %patch -P 2 -p1
 %endif
 %patch -P 3 -p1
+%patch -P 4 -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
@@ -119,10 +128,17 @@ export HERMES_RPM_BUILD=1
 # downloads, native bindings and Electron packaging happen only in the build.
 node --version
 npm --version
+# COPR's mock root is tmpfs. Keep the npm cache in the build tree and drop
+# it after install so it does not hold RAM during the renderer build.
+export npm_config_cache="$PWD/.npm-cache"
 npm ci
+rm -rf "$npm_config_cache"
 node apps/desktop/scripts/stage-native-deps.mjs --source "$PWD" --out "$PWD/apps/desktop/build/native-deps"
 export HERMES_PAYLOAD_VERSION=%{version}
-npm run build --workspace apps/desktop
+# Keep the Vite/Rolldown renderer build under COPR's 2 GiB limit: cap the
+# V8 heap so GC runs earlier, and limit Rolldown's native worker threads.
+NODE_OPTIONS=--max-old-space-size=1024 RAYON_NUM_THREADS=2 \
+    npm run build --workspace apps/desktop
 npm run builder --workspace apps/desktop -- --native-deps "$PWD/apps/desktop/build/native-deps" --linux --x64 --dir
 test -x apps/desktop/release/linux-unpacked/Hermes
 test -f apps/desktop/release/linux-unpacked/resources/app.asar
@@ -188,6 +204,10 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-5
+- Use mainline nodejs and nodejs-npm on Fedora 43
+- Reduce desktop renderer build memory for 2 GiB COPR builders
+
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-4
 - Build and ship the x86_64 Electron desktop app with the RPM backend
 
