@@ -1,5 +1,5 @@
 # Personal COPR package. Version is bumped by hand.
-# Upstream GitHub tag is v%{version}.
+# Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
 Version:        0.21.6
@@ -149,6 +149,7 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-1
 - Update to 0.21.6
 - Refresh relax-deps.patch for upstream dependency markers
+- Refresh managed-update.patch for the uninstall command
 
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 0.21.5-1
 - Update to 0.21.5
