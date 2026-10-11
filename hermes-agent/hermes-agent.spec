@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.21.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -146,6 +146,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_datadir}/hermes-agent/
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-2
+- Keep the dependency array closed after removing nemo-relay
+
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-1
 - Update to 0.21.6
 - Refresh relax-deps.patch for upstream dependency markers
