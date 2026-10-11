@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.21.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -16,6 +16,10 @@ Patch0:         relax-deps.patch
 # Teach upstream's install-method detector about RPM/ostree and refuse
 # in-place `hermes update` / `hermes uninstall`.
 Patch1:         managed-update.patch
+# Fedora 45+ defaults to Python 3.15; its packaged dependencies use 3.15.
+%if 0%{?fedora} >= 45
+Patch2:         python315-compat.patch
+%endif
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -146,6 +150,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_datadir}/hermes-agent/
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-3
+- Allow Python 3.15 when building on Fedora 45 and newer
+
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-2
 - Keep the dependency array closed after removing nemo-relay
 

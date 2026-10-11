@@ -1,0 +1,11 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -11,7 +11,7 @@
+ # we *only* support 3.14, BUT we need to allow old hermes installs on <3.14
+ # to get thru their update step on old python.
+ # Shortly after they do, we update to our latest python.
+ # See tests/compat/README.md for the updater contract this keeps.
+-requires-python = ">=3.11,<3.15"
++requires-python = ">=3.11,<3.16"
+ authors = [{ name = "Nous Research" }]
+ license = "MIT"
