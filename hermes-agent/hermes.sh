@@ -25,4 +25,25 @@ export HERMES_DISABLE_LAZY_INSTALLS="${HERMES_DISABLE_LAZY_INSTALLS:-1}"
 # Do not try to write .pyc under /usr.
 export PYTHONDONTWRITEBYTECODE="${PYTHONDONTWRITEBYTECODE:-1}"
 
+case "${1:-}" in
+    desktop|gui)
+        shift
+        for arg in "$@"; do
+            case "$arg" in
+                --source|--build-only|--force-build|--setup-tcc-identity)
+                    printf '%s\n' "Desktop builds are managed by RPM; use the packaged app instead." >&2
+                    exit 2
+                    ;;
+            esac
+        done
+        declare -r DESKTOP=/usr/libexec/hermes-agent/desktop/Hermes
+        if [[ ! -x "$DESKTOP" ]]; then
+            printf 'Desktop app is missing at %s; reinstall hermes-agent.\n' "$DESKTOP" >&2
+            exit 1
+        fi
+        export HERMES_DESKTOP_HERMES=/usr/bin/hermes
+        exec "$DESKTOP" "$@"
+        ;;
+esac
+
 exec /usr/bin/hermes-cli "$@"

@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.21.6
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -19,13 +19,26 @@ Patch1:         managed-update.patch
 # Always include this patch in the SRPM; COPR creates the SRPM without a
 # Fedora-specific macro before building it in individual chroots.
 Patch2:         python315-compat.patch
+# Make the RPM-built Electron artifact use external package updates.
+Patch3:         rpm-desktop-update.patch
 
-BuildArch:      noarch
+ExclusiveArch:  x86_64
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(wheel)
+BuildRequires:  nodejs22-bin >= 1:22.22.0
+BuildRequires:  nodejs22-npm-bin
+# Upstream accepts npm <11.10.0 or >=11.17.0; Fedora's Node 22 uses npm 10.
+BuildRequires:  nodejs22-npm < 1:11.10.0
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  libX11-devel
+BuildRequires:  libXi-devel
 
-# Skill helper scripts may have Node shebangs. Node is optional
-# (Suggests: nodejs); do not hard-require it on Fedora CoreOS.
+# The Electron runtime is prebuilt and retains native libraries inside its
+# private tree; do not split its symbols into a separate debuginfo RPM.
+%global debug_package %{nil}
+
+# Skill helper scripts may have Node shebangs. Node is optional at runtime.
 %global __brp_mangle_shebangs_exclude_from %{_datadir}/hermes-agent/.*
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^/usr/bin/node$
 
@@ -67,7 +80,7 @@ Requires:       python3dist(ptyprocess)
 Requires:       python3dist(pillow)
 
 # Optional extras. Suggests (not Recommends): rpm-ostree installs weak
-# deps by default, and Chromium/Node do not belong on Fedora CoreOS.
+# deps by default; Electron already ships Chromium in the RPM.
 Suggests:       nodejs
 Suggests:       ripgrep
 Suggests:       ffmpeg-free
@@ -84,6 +97,8 @@ Runtime state lives in $HERMES_HOME (default ~/.hermes). Lazy PyPI installs
 are disabled so the package does not write under /usr at runtime.
 `hermes update` / `hermes uninstall` are refused; upgrade via rpm-ostree or
 a bootc image rebuild.
+The x86_64 package also contains a prebuilt Electron desktop app. Run
+`hermes desktop` or `hermes gui` to launch it with this RPM's agent backend.
 
 %prep
 %autosetup -N -p1 -n hermes-agent-%{version}
@@ -92,6 +107,7 @@ a bootc image rebuild.
 %if 0%{?fedora} >= 45
 %patch -P 2 -p1
 %endif
+%patch -P 3 -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
@@ -99,10 +115,27 @@ a bootc image rebuild.
 %build
 export HERMES_RPM_BUILD=1
 %pyproject_wheel
+# COPR networking is enabled for this personal project. Lockfile-controlled
+# downloads, native bindings and Electron packaging happen only in the build.
+node --version
+npm --version
+npm ci
+node apps/desktop/scripts/stage-native-deps.mjs --source "$PWD" --out "$PWD/apps/desktop/build/native-deps"
+export HERMES_PAYLOAD_VERSION=%{version}
+npm run build --workspace apps/desktop
+npm run builder --workspace apps/desktop -- --native-deps "$PWD/apps/desktop/build/native-deps" --linux --x64 --dir
+test -x apps/desktop/release/linux-unpacked/Hermes
+test -f apps/desktop/release/linux-unpacked/resources/app.asar
 
 %install
 export HERMES_RPM_BUILD=1
 %pyproject_install
+
+install -d -m0755 %{buildroot}%{_libexecdir}/hermes-agent/desktop
+cp -a apps/desktop/release/linux-unpacked/. %{buildroot}%{_libexecdir}/hermes-agent/desktop/
+# Chromium requires a root-owned setuid helper when unprivileged user
+# namespaces are disabled. RPM installs the buildroot payload as root.
+chmod 4755 %{buildroot}%{_libexecdir}/hermes-agent/desktop/chrome-sandbox
 
 # Keep the setuptools entry point, and put the RPM wrapper on /usr/bin/hermes.
 mv %{buildroot}%{_bindir}/hermes %{buildroot}%{_bindir}/hermes-cli
@@ -152,8 +185,12 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_bindir}/hermes-agent
 %{python3_sitelib}/hermes-agent.pth
 %{_datadir}/hermes-agent/
+%{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-4
+- Build and ship the x86_64 Electron desktop app with the RPM backend
+
 * Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-3
 - Allow Python 3.15 when building on Fedora 45 and newer
 
