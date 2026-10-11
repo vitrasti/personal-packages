@@ -16,10 +16,9 @@ Patch0:         relax-deps.patch
 # Teach upstream's install-method detector about RPM/ostree and refuse
 # in-place `hermes update` / `hermes uninstall`.
 Patch1:         managed-update.patch
-# Fedora 45+ defaults to Python 3.15; its packaged dependencies use 3.15.
-%if 0%{?fedora} >= 45
+# Always include this patch in the SRPM; COPR creates the SRPM without a
+# Fedora-specific macro before building it in individual chroots.
 Patch2:         python315-compat.patch
-%endif
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -87,7 +86,12 @@ are disabled so the package does not write under /usr at runtime.
 a bootc image rebuild.
 
 %prep
-%autosetup -p1 -n hermes-agent-%{version}
+%autosetup -N -p1 -n hermes-agent-%{version}
+%autopatch -p1 -m 0 -M 1
+# Fedora 45+ defaults to Python 3.15; its packaged dependencies use 3.15.
+%if 0%{?fedora} >= 45
+%patch -P 2 -p1
+%endif
 
 %generate_buildrequires
 %pyproject_buildrequires
