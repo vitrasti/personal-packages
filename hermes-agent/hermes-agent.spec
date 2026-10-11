@@ -1,15 +1,14 @@
 # Personal COPR package. Version is bumped by hand.
-# Upstream GitHub tag is v2026.9.24 (pyproject version 0.21.5).
-%global tag_version 2026.9.24
+# Upstream GitHub tag is v%{version}.
 
 Name:           hermes-agent
-Version:        0.21.5
+Version:        0.21.6
 Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
 URL:            https://github.com/NousResearch/hermes-agent
-Source0:        %{url}/archive/refs/tags/v%{tag_version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        hermes.sh
 # Relax exact PyPI pins and requires-python so Fedora 44 (Python 3.14) can
 # satisfy %%pyproject_buildrequires. Drop core deps that are not in Fedora.
@@ -83,7 +82,7 @@ are disabled so the package does not write under /usr at runtime.
 a bootc image rebuild.
 
 %prep
-%autosetup -p1 -n hermes-agent-%{tag_version}
+%autosetup -p1 -n hermes-agent-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
@@ -146,6 +145,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_datadir}/hermes-agent/
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-1
+- Update to 0.21.6
+
 * Wed Sep 30 2026 vitrasti <vitrasti@protonmail.com> - 0.21.5-1
 - Update to 0.21.5
 

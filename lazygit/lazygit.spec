@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           lazygit
-Version:        0.66.0
+Version:        0.66.1
 Release:        1%{?dist}
 Summary:        Simple, pragmatic TUI (Terminal UI) frontend for GIT
 
@@ -75,6 +75,9 @@ install -Dpm 0644 %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 %endif
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 0.66.1-1
+- Update to 0.66.1
+
 * Tue Oct 06 2026 vitrasti <vitrasti@protonmail.com> - 0.66.0-1
 - Update to 0.66.0
 

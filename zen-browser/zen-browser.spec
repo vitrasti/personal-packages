@@ -3,7 +3,7 @@
 %global             debug_package %{nil}
 
 Name:               zen-browser
-Version:            1.23.1b
+Version:            1.23.2b
 Release:            1%{?dist}
 Summary:            Zen Browser
 
@@ -68,6 +68,9 @@ gtk-update-icon-cache -f -t %{_datadir}/icons/hicolor
 %{instdir}/
 
 %changelog
+* Sun Oct 11 2026 vitrasti <vitrasti@protonmail.com> - 1.23.2b-1
+- Update to 1.23.2b
+
 * Wed Oct 07 2026 vitrasti <vitrasti@protonmail.com> - 1.23.1b-1
 - Update to 1.23.1b
 
