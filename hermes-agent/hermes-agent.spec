@@ -205,6 +205,7 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %changelog
 * Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.7-1
 - Update to 0.21.7
+- Refresh relax-deps.patch: upstream nemo-relay pin moved to 0.10
 
 * Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-7
 - Fix nodejs22-npm BuildRequires epoch for Fedora 45 and rawhide (npm epoch 2)
