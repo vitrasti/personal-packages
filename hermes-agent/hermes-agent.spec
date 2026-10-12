@@ -2,8 +2,8 @@
 # Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
-Version:        0.21.6
-Release:        7%{?dist}
+Version:        0.21.7
+Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -203,6 +203,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.7-1
+- Update to 0.21.7
+
 * Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-7
 - Fix nodejs22-npm BuildRequires epoch for Fedora 45 and rawhide (npm epoch 2)
 
