@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.21.6
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -32,7 +32,12 @@ BuildRequires:  nodejs22-npm-bin
 # (Rolldown calls it) in mock, which skips weak deps.
 BuildRequires:  nodejs22-full-i18n
 # Upstream accepts npm <11.10.0 or >=11.17.0; Fedora's Node 22 uses npm 10.
+# nodejs22-npm epoch was bumped 1 -> 2 on F45; keep the guard per epoch.
+%if 0%{?fedora} >= 45
+BuildRequires:  nodejs22-npm < 2:11.10.0
+%else
 BuildRequires:  nodejs22-npm < 1:11.10.0
+%endif
 %else
 # F43 ships Node 22 as the mainline nodejs package.
 BuildRequires:  nodejs >= 1:22.22.0
@@ -198,6 +203,9 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-7
+- Fix nodejs22-npm BuildRequires epoch for Fedora 45 and rawhide (npm epoch 2)
+
 * Mon Oct 12 2026 vitrasti <vitrasti@protonmail.com> - 0.21.6-6
 - BuildRequire full Node ICU data; Intl.Segmenter crashed Vite without it
 - Drop the desktop build memory tweaks; memory was not the cause
