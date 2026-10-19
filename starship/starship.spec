@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name: starship
-Version: 1.26.0
+Version: 1.27.0
 Release: 1%{?dist}
 Summary: Minimal, blazing-fast, and infinitely customizable prompt for any shell!
 
@@ -45,5 +45,8 @@ rm -f %{buildroot}%{_prefix}/.crates.toml \
 %{_bindir}/%{name}
 
 %changelog
+* Mon Oct 19 2026 vitrasti <vitrasti@protonmail.com> - 1.27.0
+- Update to 1.27.0
+
 * Sun Aug 09 2026 vitrasti <vitrasti@protonmail.com> - 1.26.0
 - Initial release for personal copr repo.

@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.11.1
+Version:        18.12.2
 Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
@@ -79,6 +79,9 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Mon Oct 19 2026 vitrasti <vitrasti@protonmail.com> - 18.12.2-1
+- Update to 18.12.2
+
 * Fri Oct 16 2026 vitrasti <vitrasti@protonmail.com> - 18.11.1-1
 - Update to 18.11.1
 

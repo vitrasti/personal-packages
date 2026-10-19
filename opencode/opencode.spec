@@ -5,7 +5,7 @@
 %global __strip /bin/true
 
 Name:           opencode
-Version:        2.0.30
+Version:        2.0.32
 Release:        1%{?dist}
 Summary:        The open source AI coding agent built for the terminal
 
@@ -74,6 +74,9 @@ chmod 0644 \
 %{_datadir}/zsh/site-functions/_opencode
 
 %changelog
+* Mon Oct 19 2026 vitrasti <vitrasti@protonmail.com> - 2.0.32-1
+- Update to 2.0.32
+
 * Fri Oct 16 2026 vitrasti <vitrasti@protonmail.com> - 2.0.30-1
 - Update to 2.0.30
 
