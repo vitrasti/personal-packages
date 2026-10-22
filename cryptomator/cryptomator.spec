@@ -9,8 +9,8 @@
 %global jfxver 25.0.3
 
 Name:           cryptomator
-Version:        1.19.3
-Release:        3%{?dist}
+Version:        1.19.4
+Release:        1%{?dist}
 Summary:        Multiplatform transparent client-side encryption for cloud storage
 
 # Install under /usr/lib (not /opt) so the package layers cleanly on
@@ -177,6 +177,9 @@ update-mime-database %{_datadir}/mime &>/dev/null || :
 %{_datadir}/licenses/%{name}/
 
 %changelog
+* Thu Oct 22 2026 vitrasti <vitrasti@protonmail.com> - 1.19.4-1
+- Update to 1.19.4
+
 * Sat Aug 08 2026 vitrasti <vitrasti@protonmail.com> - 1.19.3-3
 - Install app image to /usr/lib/cryptomator instead of /opt for rpm-ostree compatibility
 

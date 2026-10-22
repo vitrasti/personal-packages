@@ -1,6 +1,6 @@
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -37,25 +37,25 @@
+@@ -37,29 +37,29 @@
    # extra and gets prepared through PM when the
    # user picks that backend. Smaller `dependencies` = smaller blast
    # radius for the next supply-chain attack.
@@ -30,15 +30,20 @@
 +  "tomli-w",  # Preserve relative dependency paths in staged plugin metadata.
    # 0.18.17 requires ruamel.yaml.clib on 3.14, which has no Windows ARM64 wheel.
 -  "ruamel.yaml==0.18.16; python_version >= '3.14'",
++  "ruamel.yaml",
+   # 0.18.16 only pulls in its C parser below 3.14, so every 3.14 install parsed YAML
+   # (plugin manifests, config) in pure Python: ~5 s of gateway startup on 1 vCPU.
+   # Declared where clib ships a cp314 wheel; elsewhere hermes_yaml falls back to pure.
+-  "ruamel.yaml.clib==0.2.15; python_version >= '3.14' and platform_python_implementation == 'CPython' and (sys_platform == 'darwin' or (sys_platform == 'linux' and platform_machine in 'x86_64 aarch64 i686') or (sys_platform == 'win32' and platform_machine in 'AMD64 x86'))",
 -  "requests==2.33.0; python_version >= '3.14'",  # CVE-2026-25645
 -  "jinja2==3.1.6; python_version >= '3.14'",
-+  "ruamel.yaml",
++  "ruamel.yaml.clib; platform_python_implementation == 'CPython' and (sys_platform == 'darwin' or (sys_platform == 'linux' and platform_machine in 'x86_64 aarch64 i686') or (sys_platform == 'win32' and platform_machine in 'AMD64 x86'))",
 +  "requests",  # CVE-2026-25645
 +  "jinja2",
    # Document-to-Markdown extraction for read_file (PDF, legacy Office,
    # OpenDocument, RTF, EPUB) + typed NeedsOcrError for scanned pages.
    # Bundled in core by maintainer decision (read_file is a core tool and
-@@ -63,24 +63,23 @@
+@@ -67,24 +67,23 @@
    # arrangement dated to the package's uv exclude-newer quarantine, which
    # has long expired). PM's doc-extract extra repairs lean/broken installs
    # from this same dependency declaration.
@@ -68,23 +73,26 @@
    # Markdown -> HTML conversion for rich message delivery (Matrix
    # `formatted_body`, and the `send_message` tool's HTML path). Now on the
    # DEFAULT delivery path, not matrix-specific: without it both
-@@ -90,12 +89,12 @@
+@@ -94,15 +93,15 @@
    # (~108KB, no compiled extensions, no platform constraints), so unlike the
    # matrix extra's `mautrix`/`python-olm` it's safe to ship everywhere — keeps
    # it out of the lazy-install path that exists only for the heavy matrix deps.
 -  "Markdown==3.10.2; python_version >= '3.14'",
 +  "Markdown",
    # Skills Hub (GitHub App JWT auth — optional, only needed for bot identity)
--  "PyJWT[crypto]==2.13.0; python_version >= '3.14'",  # PYSEC-2026-175/177/178/179
-+  "PyJWT[crypto]",  # PYSEC-2026-175/177/178/179
-   # urllib3 2.7.0 fixes GHSA-mf9v-mfxr-j63j (decompression-bomb bypass)
-   # and GHSA-qccp-gfcp-xxvc (header leak across origins).
--  "urllib3>=2.7.0,<3; python_version >= '3.14'",
+-  "PyJWT[crypto]==2.15.1; python_version >= '3.14'",  # PYSEC-2026-175/177/178/179 + GHSA-ffc3-869f-jxw9, GHSA-42vr-xj54-vc7v (fixed in 2.14.0/2.15.0)
++  "PyJWT[crypto]",  # PYSEC-2026-175/177/178/179 + GHSA-ffc3-869f-jxw9, GHSA-42vr-xj54-vc7v (fixed in 2.14.0/2.15.0)
+   # urllib3 2.8.0 fixes GHSA-8988-9cw3-xx77 (proxy TLS config ignored),
+   # GHSA-gh4c-6fx4-qh6g (chunked-deflate infinite loop) and
+   # GHSA-vxq7-64xx-v4gw (unbounded chunk buffering). 2.8.0 is the latest
+   # release older than 3 days and still supports Python >= 3.10
+   # (3.11 bridge intact).
+-  "urllib3>=2.8.0,<3; python_version >= '3.14'",
 +  "urllib3",
    # PyJWT[crypto] pulls cryptography in transitively. Pin it here as well, so
    # that the WeCom and Weixin crypto paths cannot fall below the patched
    # version. 50.0.0 is the floor: it fixes CVE-2026-69247, a Bleichenbacher
-@@ -107,7 +106,7 @@
+@@ -114,7 +113,7 @@
    # A pin here is not sufficient on its own. alibabacloud-tea-openapi caps
    # cryptography<49, so [tool.uv] also holds an override. Read that comment
    # before you move this version.
@@ -93,7 +101,7 @@
    # Windows has no IANA tzdata shipped with the OS, so Python's ``zoneinfo``
    # (PEP 615) raises ``ZoneInfoNotFoundError`` for every non-UTC timezone
    # out of the box.  ``tzdata`` ships the Olson database as a data package
-@@ -119,36 +118,35 @@
+@@ -126,36 +125,35 @@
    # macOS and Windows.  It replaces POSIX-only idioms like `os.kill(pid, 0)`
    # (which is a silent killer on Windows — see CONTRIBUTING.md) and
    # `os.killpg` (which doesn't exist on Windows).
@@ -139,7 +147,7 @@
    # Python 3.14 requires pywinpty 3.x. Version 3.0.5 includes the native
    # binaries missing from 3.0.4 wheels on both Windows architectures.
    "pywinpty>=3.0.5,<4; sys_platform == 'win32' and python_version >= '3.14'",
-@@ -170,7 +168,7 @@
+@@ -177,7 +175,7 @@
    # libs required for the codecs we use, so it's safe to ship in the base
    # install rather than gating it behind an extra + a mid-session lazy install
    # (which deadlocked the CLI under prompt_toolkit — see #40490).
@@ -148,7 +156,7 @@
    # HEIF/HEIC/AVIF decode for the vision tools. iPhone photos and screenshots
    # are HEIC (frequently mislabeled .jpg by upload pipelines); Pillow has no
    # built-in HEIF codec, so without this the vision resolver rejects them as
-@@ -178,13 +176,11 @@
+@@ -185,13 +183,11 @@
    # _normalize_to_supported_image can re-encode HEIF/AVIF to PNG before embed.
    # Ships prebuilt wheels bundling libheif for the common platforms (no system
    # libs needed), so it's safe in the base install alongside Pillow.
@@ -162,7 +170,7 @@
    # Windows log rotation. Stdlib ``RotatingFileHandler.doRollover()`` uses
    # ``os.rename()`` which fails with ``PermissionError [WinError 32]`` on
    # Windows whenever any other process holds an append-mode handle on
-@@ -213,7 +209,7 @@
+@@ -220,7 +216,7 @@
    # 738 CPython reports sys_platform == 'android' and never matched.) Pre-GKI
    # devices can still slip through; they get the same resolution failure as
    # before, worked around by installing with `--no-deps` or an older release.
@@ -171,7 +179,7 @@
  
  [project.optional-dependencies]
  # High-performance event loop — uvloop replaces the stdlib asyncio loop with
-@@ -551,7 +546,7 @@
+@@ -557,7 +553,7 @@
  # PEP 517 isolated builds. Without wheel in
  # requires, the isolation sandbox only gets setuptools and the build
  # fails with ModuleNotFoundError: wheel.cli (#96488).
