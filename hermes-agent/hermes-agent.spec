@@ -2,7 +2,7 @@
 # Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
-Version:        0.22.4
+Version:        0.22.5
 Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
@@ -203,6 +203,11 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Fri Oct 23 2026 vitrasti <vitrasti@protonmail.com> - 0.22.5-1
+- Update to 0.22.5
+- Refresh relax-deps.patch for upstream dependency bumps (certifi
+  2026.10.19, Pillow 13.0.0)
+
 * Thu Oct 22 2026 vitrasti <vitrasti@protonmail.com> - 0.22.4-1
 - Update to 0.22.4
 - Refresh relax-deps.patch for upstream dependency changes (PyJWT 2.15.1,

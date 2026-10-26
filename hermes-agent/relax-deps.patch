@@ -5,7 +5,7 @@
    # user picks that backend. Smaller `dependencies` = smaller blast
    # radius for the next supply-chain attack.
 -  "openai==2.24.0; python_version >= '3.14'",
--  "certifi==2026.5.20; python_version >= '3.14'",
+-  "certifi==2026.10.19; python_version >= '3.14'",
 +  "openai",
 +  "certifi",
    # TLS trust comes from the OS certificate store (agent/ssl_verify.py), so
@@ -151,7 +151,7 @@
    # libs required for the codecs we use, so it's safe to ship in the base
    # install rather than gating it behind an extra + a mid-session lazy install
    # (which deadlocked the CLI under prompt_toolkit — see #40490).
--  "Pillow==12.3.0; python_version >= '3.14'",
+-  "Pillow==13.0.0; python_version >= '3.14'",
 +  "Pillow",
    # HEIF/HEIC/AVIF decode for the vision tools. iPhone photos and screenshots
    # are HEIC (frequently mislabeled .jpg by upload pipelines); Pillow has no
@@ -179,7 +179,7 @@
  
  [project.optional-dependencies]
  # High-performance event loop — uvloop replaces the stdlib asyncio loop with
-@@ -557,7 +553,7 @@
+@@ -559,7 +555,7 @@
  # PEP 517 isolated builds. Without wheel in
  # requires, the isolation sandbox only gets setuptools and the build
  # fails with ModuleNotFoundError: wheel.cli (#96488).
