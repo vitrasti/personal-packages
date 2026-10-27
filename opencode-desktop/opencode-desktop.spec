@@ -7,7 +7,7 @@
 %global __strip /bin/true
 
 Name:           opencode-desktop
-Version:        2.1.4
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        OpenCode desktop client for the terminal AI coding agent
 
@@ -85,6 +85,9 @@ grep -Fq "Exec=/opt/OpenCode/ai.opencode %U" %{buildroot}%{_datadir}/application
 %{_metainfodir}/ai.opencode.desktop.metainfo.xml
 
 %changelog
+* Tue Oct 27 2026 vitrasti <vitrasti@protonmail.com> - 2.2.0-1
+- Update to 2.2.0
+
 * Sat Oct 24 2026 vitrasti <vitrasti@protonmail.com> - 2.1.4-1
 - Initial package for personal COPR
 - Repackage upstream's prebuilt Linux x86_64 desktop RPM
