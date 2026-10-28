@@ -28,7 +28,7 @@
 
 Name:           grok-bot
 Version:        0.78.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Grok Bot desktop agent
 
 License:        LicenseRef-Proprietary
@@ -95,7 +95,7 @@ install -dm0755 %{buildroot}/opt %{buildroot}%{_sysconfdir}/yum.repos.d \
 cp -a "payload/opt/Grok Bot" %{buildroot}/opt/%{name}
 cp -a payload/usr/share/applications/grok-bot.desktop %{buildroot}%{_datadir}/applications/
 cp -a payload/usr/share/icons/hicolor %{buildroot}%{_datadir}/icons/
-# Wrapper on PATH: the desktop entry runs `grok-bot %U`. Chromium
+# Wrapper on PATH: the desktop entry runs `grok-bot -- %U`. Chromium
 # bundles an older fontconfig; skipping the cache version check avoids
 # a warning on every launch.
 cat > %{buildroot}%{_bindir}/%{name} <<'EOF'
@@ -134,7 +134,8 @@ test "$(stat -c %a %{buildroot}/opt/%{name}/chrome-sandbox)" = "4755"
 # Wrapper must exec the relocated binary.
 grep -Fxq 'exec /opt/grok-bot/grok-bot "$@"' %{buildroot}%{_bindir}/%{name}
 # Visible desktop entry must point at the wrapper on PATH.
-grep -Fq 'Exec=grok-bot %%U' %{buildroot}%{_datadir}/applications/grok-bot.desktop
+# Upstream 0.78.1 inserts -- so a URL is not parsed as an option.
+grep -Fq 'Exec=grok-bot -- %%U' %{buildroot}%{_datadir}/applications/grok-bot.desktop
 # Bundled AppArmor profile must reference the relocated path.
 grep -Fq 'profile "grok-bot" "/opt/grok-bot/grok-bot"' %{buildroot}/opt/%{name}/resources/apparmor-profile
 # Update marker must point at this COPR, never the vendor's repo, and
@@ -163,6 +164,9 @@ head -n1 %{buildroot}/opt/%{name}/resources/app.asar.unpacked/dist/deps/node-gyp
 %{_datadir}/icons/hicolor/512x512/apps/grok-bot.png
 
 %changelog
+* Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-2
+- Accept upstream desktop Exec=grok-bot -- %U
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-1
 - Update to 0.78.1
 - Update pinned upstream commit and RPM sha256
