@@ -17,7 +17,7 @@
 %global __requires_exclude_from ^%{instdir}/.*$
 
 Name:           brave-browser
-Version:        1.98.60
+Version:        1.98.62
 Release:        1%{?dist}
 Summary:        Web browser that blocks ads and trackers by default
 
@@ -152,6 +152,9 @@ update-desktop-database -q %{_datadir}/applications &>/dev/null || :
 %{_mandir}/man1/brave-browser-stable.1*
 
 %changelog
+* Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 1.98.62-1
+- Update to 1.98.62
+
 * Wed Oct 21 2026 vitrasti <vitrasti@protonmail.com> - 1.98.60-1
 - Update to 1.98.60
 

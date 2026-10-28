@@ -1,6 +1,6 @@
 # llama-cpp-vulkan
 
-Source-built llama.cpp 0.6.0 for Fedora x86_64, with Vulkan, portable CPU
+Source-built llama.cpp 0.8.0 for Fedora x86_64, with Vulkan, portable CPU
 backends, and `llama-server` with its embedded Web UI. Intel Vulkan drivers
 (`mesa-vulkan-drivers`) are required by the RPM.
 

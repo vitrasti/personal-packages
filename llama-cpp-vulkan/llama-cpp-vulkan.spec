@@ -1,8 +1,8 @@
 # Personal COPR package: enable buildroot networking for npm ci (locked Web UI).
 # References: sneed/llama-cpp-vulkan and lacamar/arm64-misc on COPR.
 %global upstream_tag v%{version}
-%global llama_build_number 11669
-%global llama_build_commit 620d2225cc436ab0b001e3200e590e3b286ef9ab
+%global llama_build_number 11960
+%global llama_build_commit 8642541b255bfb5dc39cd351a178be09013a55d6
 %global privlibdir %{_libdir}/%{name}
 # Keep bundled ggml/llama libraries private to this application. Their internal
 # dependencies are satisfied by this RPM, not by another ggml consumer.
@@ -10,7 +10,7 @@
 %global __requires_exclude ^lib(ggml[^ ]*|llama[^ ]*|mtmd)[.]so.*$
 
 Name:           llama-cpp-vulkan
-Version:        0.7.0
+Version:        0.8.0
 Release:        1%{?dist}
 Summary:        Local LLM inference tools and HTTP server with Vulkan acceleration
 # Includes bundled C/C++ code and the compiled, locked upstream Web UI.
@@ -165,6 +165,10 @@ PY
 %{privlibdir}/lib*.so*
 
 %changelog
+* Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.8.0-1
+- Update to 0.8.0
+- Update build number and commit to match upstream release tag
+
 * Fri Oct 16 2026 vitrasti <vitrasti@protonmail.com> - 0.7.0-1
 - Update to 0.7.0
 - Update build number and commit to match upstream release tag
