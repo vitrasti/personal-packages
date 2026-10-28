@@ -1,8 +1,14 @@
-# Personal COPR package: enable buildroot networking for npm ci (locked Web UI).
+# Personal COPR package. Builders allow 2048 MiB, which is not enough for the
+# 0.8.0 Web UI vite build. Embed the official UI asset from the matching
+# llama.cpp release. npm ci still runs so locked dependency license notices are
+# collected; enable buildroot networking for that.
 # References: sneed/llama-cpp-vulkan and lacamar/arm64-misc on COPR.
 %global upstream_tag v%{version}
 %global llama_build_number 11960
 %global llama_build_commit 8642541b255bfb5dc39cd351a178be09013a55d6
+# sha256 of the official llama-bN-ui.tar.gz asset for llama_build_number.
+# Update this whenever llama_build_number changes.
+%global ui_sha256 f27576af534ac990a6c802fc5b6c7651e0a2c0b6ac857ba995bc343cf8a3b934
 %global privlibdir %{_libdir}/%{name}
 # Keep bundled ggml/llama libraries private to this application. Their internal
 # dependencies are satisfied by this RPM, not by another ggml consumer.
@@ -11,12 +17,13 @@
 
 Name:           llama-cpp-vulkan
 Version:        0.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Local LLM inference tools and HTTP server with Vulkan acceleration
 # Includes bundled C/C++ code and the compiled, locked upstream Web UI.
 License:        MIT AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND 0BSD AND Zlib AND CC0-1.0 AND Unlicense AND OFL-1.1 AND BlueOak-1.0.0 AND MPL-2.0 AND LGPL-3.0-or-later AND Python-2.0 AND CC-BY-4.0
 URL:            https://github.com/ggml-org/llama.cpp
 Source0:        %{url}/archive/refs/tags/%{upstream_tag}.tar.gz#/llama.cpp-%{version}.tar.gz
+Source1:        %{url}/releases/download/b%{llama_build_number}/llama-b%{llama_build_number}-ui.tar.gz
 
 ExclusiveArch:  x86_64
 BuildRequires:  cmake >= 3.19
@@ -55,19 +62,23 @@ application container, pass /dev/dri through to the container as well.
 
 %prep
 %autosetup -n llama.cpp-%{version}
+# Official UI for this release. vite's production build exceeds COPR's 2048 MiB
+# limit (JavaScript heap out of memory). CMake embeds tools/ui/dist when
+# index.html is already present and does not download a newer UI.
+echo "%{ui_sha256}  %{SOURCE1}" | sha256sum -c -
+mkdir -p tools/ui/dist
+tar -xzf %{SOURCE1} -C tools/ui/dist --strip-components=1
+test -s tools/ui/dist/index.html
+grep -q '"version":"b%{llama_build_number}"' tools/ui/dist/build.json
 
 %build
-# Build exactly the UI in this release; do not let CMake fetch a newer UI from
-# Hugging Face or silently produce a server without its embedded Web UI.
+# Do not let CMake fetch a newer UI from Hugging Face or silently produce a
+# server without its embedded Web UI. The matching release asset is unpacked
+# in %%prep. npm ci only collects license notices from the locked tree.
 export npm_config_cache="$PWD/.npm-cache"
 export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-# Non-interactive mode avoids the PWA asset generator crash in RPM builds.
-export CI=1
 pushd tools/ui
 npm ci --no-audit --no-fund
-LLAMA_UI_OUT_DIR="$PWD/dist" \
-LLAMA_UI_VERSION=%{upstream_tag} \
-LLAMA_BUILD_NUMBER=%{llama_build_number} npm run build
 test -s dist/index.html
 popd
 
@@ -165,6 +176,10 @@ PY
 %{privlibdir}/lib*.so*
 
 %changelog
+* Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.8.0-2
+- Embed the official b11960 Web UI instead of running vite on COPR
+- The vite client build exceeds the 2048 MiB builder limit
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.8.0-1
 - Update to 0.8.0
 - Update build number and commit to match upstream release tag
