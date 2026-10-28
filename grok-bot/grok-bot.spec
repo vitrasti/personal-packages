@@ -28,7 +28,7 @@
 
 Name:           grok-bot
 Version:        0.78.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Grok Bot desktop agent
 
 License:        LicenseRef-Proprietary
@@ -44,9 +44,11 @@ ExclusiveArch:  x86_64
 # The app shells out to xdg-open for sign-in.
 Requires:       xdg-utils
 # Electron dlopens these at runtime, so they are not in the binaries'
-# NEEDED lists and auto-detection cannot see them; they come from
-# upstream's own RPM/.deb dependency lists.
-Requires:       libXss
+# NEEDED lists and auto-detection cannot see them. Matches upstream's
+# RPM requires, plus libsecret and libdrm from the .deb list. libXss is
+# omitted: the binary has no NEEDED entry and no libXss/XScreenSaver
+# string, and upstream's RPM does not require it. The .deb lists
+# libxss1 only as electron-builder's stock Debian template entry.
 Requires:       libXtst
 Requires:       libnotify
 Requires:       libuuid
@@ -164,6 +166,11 @@ head -n1 %{buildroot}/opt/%{name}/resources/app.asar.unpacked/dist/deps/node-gyp
 %{_datadir}/icons/hicolor/512x512/apps/grok-bot.png
 
 %changelog
+* Thu Oct 29 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-3
+- Drop Requires: libXss. The binary does not reference it, and
+  upstream's RPM does not require it. The name is not a Fedora provide,
+  so the package could not be installed.
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-2
 - Accept upstream desktop Exec=grok-bot -- %U
 
