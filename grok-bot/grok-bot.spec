@@ -3,11 +3,14 @@
 # sandbox fallback cannot exec from such a path
 # (https://github.com/electron/electron/issues/44414), which is fatal on
 # Fedora CoreOS, where unprivileged user namespaces are restricted and
-# the setuid helper is required. The payload is relocated to
-# /opt/grok-bot. Upstream's scriptlets register the vendor dnf repo for
-# in-app updates; instead we ship /etc/yum.repos.d/grok-bot.repo
-# pointing at this package's COPR, which also marks the install as
-# rpm-managed so in-app self-update stays off. No scriptlets.
+# the setuid helper is required. /opt itself is also unusable on
+# bootc/rpm-ostree: it is a symlink to /var/opt, and RPM unpack fails
+# with "mkdir failed - File exists". The payload is relocated to
+# /usr/lib/grok-bot (no space, and part of the ostree). Upstream's
+# scriptlets register the vendor dnf repo for in-app updates; instead
+# we ship /etc/yum.repos.d/grok-bot.repo pointing at this package's
+# COPR, which also marks the install as rpm-managed so in-app
+# self-update stays off. No scriptlets.
 # Prebuilt Electron binary — do not strip or generate debuginfo.
 %global debug_package %{nil}
 %global __strip /bin/true
@@ -18,6 +21,10 @@
 # binary; the shebangs are inert. Keep the payload verbatim.
 %global __spec_install_post \
 %(echo '%{__spec_install_post}' | sed -e 's|/usr/lib/rpm/redhat/brp-mangle-shebangs.*||g')
+# /usr/lib, not /opt: /opt is a symlink on bootc/rpm-ostree and RPM
+# cannot unpack a package into it. %{_prefix}/lib stays /usr/lib on
+# x86_64 (not %{_libdir}, which is /usr/lib64).
+%global instdir %{_prefix}/lib/%{name}
 
 # Upstream release commit; artifacts are pinned to it. Find the current
 # one from the update feed (see build-command.md).
@@ -28,7 +35,7 @@
 
 Name:           grok-bot
 Version:        0.78.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Grok Bot desktop agent
 
 License:        LicenseRef-Proprietary
@@ -68,15 +75,16 @@ Grok Bot is xAI's desktop app for always-on AI agents: named Bots with
 a shared cloud computer that work inside your tools and apps.
 
 This package repackages upstream's official prebuilt Linux x86_64 RPM.
-The app is relocated from upstream's /opt/Grok Bot to /opt/grok-bot so
-the setuid chrome-sandbox works on systems with restricted
+The app is relocated from upstream's /opt/Grok Bot to /usr/lib/grok-bot
+so the setuid chrome-sandbox works on systems with restricted
 unprivileged user namespaces (Fedora 43+, Fedora CoreOS); Chromium
-cannot exec its SUID helper from a path containing a space. Updates
-are owned by the package manager: the shipped
-/etc/yum.repos.d/grok-bot.repo points at this package's COPR, which
-both feeds the app and marks the install as rpm-managed so in-app
-self-update stays off. No scriptlets — safe for rpm-ostree / Fedora
-CoreOS / bootc images.
+cannot exec its SUID helper from a path containing a space. /usr/lib
+is also required for bootc/rpm-ostree, where /opt is a symlink and RPM
+cannot unpack files there. Updates are owned by the package manager:
+the shipped /etc/yum.repos.d/grok-bot.repo points at this package's
+COPR, which both feeds the app and marks the install as rpm-managed so
+in-app self-update stays off. No scriptlets — safe for rpm-ostree /
+Fedora CoreOS / bootc images.
 
 %prep
 %setup -q -c -n %{name}-%{version} -T
@@ -90,28 +98,30 @@ mkdir payload
 # Prebuilt Electron app — nothing to compile.
 
 %install
-install -dm0755 %{buildroot}/opt %{buildroot}%{_sysconfdir}/yum.repos.d \
+install -dm0755 %{buildroot}%{instdir} %{buildroot}%{_sysconfdir}/yum.repos.d \
     %{buildroot}%{_bindir} %{buildroot}%{_datadir}/applications \
     %{buildroot}%{_datadir}/icons
-# Relocate the app to the space-free path (see package header).
-cp -a "payload/opt/Grok Bot" %{buildroot}/opt/%{name}
+# Relocate the app off /opt (see package header). Copy contents so the
+# pre-created instdir is not nested.
+cp -a "payload/opt/Grok Bot/." %{buildroot}%{instdir}/
 cp -a payload/usr/share/applications/grok-bot.desktop %{buildroot}%{_datadir}/applications/
 cp -a payload/usr/share/icons/hicolor %{buildroot}%{_datadir}/icons/
 # Wrapper on PATH: the desktop entry runs `grok-bot -- %U`. Chromium
 # bundles an older fontconfig; skipping the cache version check avoids
-# a warning on every launch.
+# a warning on every launch. Quoted heredoc keeps "$@"; rpm still
+# expands %{instdir} before the shell runs.
 cat > %{buildroot}%{_bindir}/%{name} <<'EOF'
 #!/bin/sh
 export FONTCONFIG_NO_CHECK_CACHE_VERSION=1
-exec /opt/grok-bot/grok-bot "$@"
+exec %{instdir}/grok-bot "$@"
 EOF
 chmod 0755 %{buildroot}%{_bindir}/%{name}
 # The SUID sandbox helper is required when unprivileged user namespaces
 # are restricted (Fedora 43+, Fedora CoreOS).
-chmod 4755 %{buildroot}/opt/%{name}/chrome-sandbox
+chmod 4755 %{buildroot}%{instdir}/chrome-sandbox
 # Point the bundled AppArmor profile at the relocated path; it stays
 # inert unless explicitly loaded.
-sed -i "s|/opt/Grok Bot/|/opt/%{name}/|g" %{buildroot}/opt/%{name}/resources/apparmor-profile
+sed -i "s|/opt/Grok Bot/|%{instdir}/|g" %{buildroot}%{instdir}/resources/apparmor-profile
 # Mark the install as rpm-managed (disables in-app self-update) and
 # keep updates in this COPR instead of the vendor's repo.
 cat > %{buildroot}%{_sysconfdir}/yum.repos.d/%{name}.repo <<EOF
@@ -126,33 +136,35 @@ skip_if_unavailable=1
 EOF
 
 %check
-test -x %{buildroot}/opt/%{name}/grok-bot
+test -x %{buildroot}%{instdir}/grok-bot
+# Nothing may land under /opt: that path cannot be unpacked on bootc.
+test ! -e %{buildroot}/opt
 # The payload is verbatim apart from the documented rewrites; the asar
 # is never touched.
 test "$(sha256sum < "payload/opt/Grok Bot/resources/app.asar")" = \
-      "$(sha256sum < %{buildroot}/opt/%{name}/resources/app.asar)"
+      "$(sha256sum < %{buildroot}%{instdir}/resources/app.asar)"
 # Sandbox helper must keep the setuid bit.
-test "$(stat -c %a %{buildroot}/opt/%{name}/chrome-sandbox)" = "4755"
+test "$(stat -c %a %{buildroot}%{instdir}/chrome-sandbox)" = "4755"
 # Wrapper must exec the relocated binary.
-grep -Fxq 'exec /opt/grok-bot/grok-bot "$@"' %{buildroot}%{_bindir}/%{name}
+grep -Fxq 'exec %{instdir}/grok-bot "$@"' %{buildroot}%{_bindir}/%{name}
 # Visible desktop entry must point at the wrapper on PATH.
 # Upstream 0.78.1 inserts -- so a URL is not parsed as an option.
 grep -Fq 'Exec=grok-bot -- %%U' %{buildroot}%{_datadir}/applications/grok-bot.desktop
 # Bundled AppArmor profile must reference the relocated path.
-grep -Fq 'profile "grok-bot" "/opt/grok-bot/grok-bot"' %{buildroot}/opt/%{name}/resources/apparmor-profile
+grep -Fq 'profile "grok-bot" "%{instdir}/grok-bot"' %{buildroot}%{instdir}/resources/apparmor-profile
 # Update marker must point at this COPR, never the vendor's repo, and
 # be enabled.
 grep -Fq 'baseurl=https://download.copr.fedorainfracloud.org/results/vitrasti/personal-packages/fedora-$releasever-$basearch/' \
      %{buildroot}%{_sysconfdir}/yum.repos.d/%{name}.repo
 grep -Fxq 'enabled=1' %{buildroot}%{_sysconfdir}/yum.repos.d/%{name}.repo
 # No stale reference to the upstream install path may survive.
-! grep -rqF "/opt/Grok Bot" %{buildroot}/opt/%{name}
+! grep -rqF "/opt/Grok Bot" %{buildroot}%{instdir}
 # Payload fidelity: no shebang may have been mangled by a BRP.
-head -n1 %{buildroot}/opt/%{name}/resources/app.asar.unpacked/dist/deps/node-gyp-build/bin.js \
+head -n1 %{buildroot}%{instdir}/resources/app.asar.unpacked/dist/deps/node-gyp-build/bin.js \
     | grep -Fxq '#!/usr/bin/env node'
 
 %files
-/opt/%{name}/
+%{instdir}/
 %{_bindir}/%{name}
 %{_sysconfdir}/yum.repos.d/%{name}.repo
 %{_datadir}/applications/grok-bot.desktop
@@ -166,6 +178,11 @@ head -n1 %{buildroot}/opt/%{name}/resources/app.asar.unpacked/dist/deps/node-gyp
 %{_datadir}/icons/hicolor/512x512/apps/grok-bot.png
 
 %changelog
+* Thu Oct 29 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-4
+- Install under /usr/lib/grok-bot instead of /opt/grok-bot. On
+  bootc/rpm-ostree /opt is a symlink, and RPM unpack fails with
+  "mkdir failed - File exists".
+
 * Thu Oct 29 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-3
 - Drop Requires: libXss. The binary does not reference it, and
   upstream's RPM does not require it. The name is not a Fedora provide,
