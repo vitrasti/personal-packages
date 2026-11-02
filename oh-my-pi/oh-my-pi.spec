@@ -4,7 +4,7 @@
 
 Name:           oh-my-pi
 Version:        18.15.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
 # First-party MIT plus bundled code/data licenses listed in upstream notices.
@@ -15,8 +15,9 @@ URL:            https://github.com/can1357/oh-my-pi
 Source0:        %{url}/releases/download/v%{version}/omp-linux-x64#/%{name}-%{version}-linux-x64
 Source1:        %{url}/releases/download/v%{version}/omp-linux-arm64#/%{name}-%{version}-linux-arm64
 Source2:        LICENSE
-Source3:        %{url}/releases/download/v%{version}/THIRD-PARTY-NOTICES.txt#/%{name}-%{version}-THIRD-PARTY-NOTICES.txt
+Source3:        %{url}/raw/v%{version}/packages/coding-agent/THIRD-PARTY-NOTICES.txt#/%{name}-%{version}-CLI-THIRD-PARTY-NOTICES.txt
 Source4:        %{url}/raw/v%{version}/README.md#/%{name}-%{version}-README.md
+Source5:        %{url}/raw/v%{version}/packages/natives/THIRD-PARTY-NOTICES.txt#/%{name}-%{version}-NATIVES-THIRD-PARTY-NOTICES.txt
 
 ExclusiveArch:  x86_64 aarch64
 
@@ -41,7 +42,8 @@ the package manager instead of using omp update to replace files in /usr.
 %prep
 %setup -q -c -n %{name}-%{version} -T
 cp -p %{SOURCE2} LICENSE
-cp -p %{SOURCE3} THIRD-PARTY-NOTICES.txt
+# Upstream keeps CLI and native addon notices in separate source files.
+cat %{SOURCE3} %{SOURCE5} > THIRD-PARTY-NOTICES.txt
 cp -p %{SOURCE4} README.md
 
 %build
@@ -79,6 +81,9 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 18.15.0-2
+- Fetch CLI and native addon notices from the versioned source tree
+
 * Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 18.15.0-1
 - Update to 18.15.0
 
