@@ -15,7 +15,7 @@
 %global __requires_exclude ^lib(EGL|GLESv2|ffmpeg|vk_swiftshader|vulkan)\.so.*$
 
 Name:           obsidian
-Version:        1.14.5
+Version:        1.15.0
 Release:        1%{?dist}
 Summary:        Knowledge base that works on a local folder of Markdown files
 
@@ -93,6 +93,9 @@ update-desktop-database -q %{_datadir}/applications &>/dev/null || :
 %{_datadir}/icons/hicolor/512x512/apps/%{name}.png
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 1.15.0-1
+- Update to 1.15.0
+
 * Thu Oct 22 2026 vitrasti <vitrasti@protonmail.com> - 1.14.5-1
 - Update to 1.14.5
 
