@@ -11,8 +11,8 @@
 %global instdir %{_prefix}/lib/%{name}
 
 Name:           opencode-desktop
-Version:        2.2.0
-Release:        2%{?dist}
+Version:        2.2.5
+Release:        1%{?dist}
 Summary:        OpenCode desktop client for the terminal AI coding agent
 
 License:        MIT
@@ -107,6 +107,9 @@ test "$(sha256sum < payload/opt/OpenCode/resources/app.asar)" = \
 %{_metainfodir}/ai.opencode.desktop.metainfo.xml
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 2.2.5-1
+- Update to 2.2.5
+
 * Thu Oct 29 2026 vitrasti <vitrasti@protonmail.com> - 2.2.0-2
 - Install under /usr/lib/opencode-desktop instead of /opt/OpenCode.
   On bootc/rpm-ostree /opt is a symlink, and RPM unpack fails with

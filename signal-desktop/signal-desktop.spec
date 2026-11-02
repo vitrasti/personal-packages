@@ -1,5 +1,5 @@
 Name:		signal-desktop
-Version:	8.32.0
+Version:	8.33.0
 Release:	1%{?dist}
 Summary:	Private messaging from your desktop
 License:	GPLv3
@@ -124,6 +124,9 @@ done
 %{_datadir}/*
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 8.33.0-1
+- Update to 8.33.0
+
 * Thu Oct 22 2026 vitrasti <vitrasti@protonmail.com> - 8.32.0-1
 - Update to 8.32.0
 

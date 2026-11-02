@@ -28,14 +28,14 @@
 
 # Upstream release commit; artifacts are pinned to it. Find the current
 # one from the update feed (see build-command.md).
-%global upstream_commit 72e130b4e6be3fdc47b97e809b6b420908ce2dd8
+%global upstream_commit cfe24863e71ea2a370145dff5e87ad8dba8e8ccb
 # sha256 of the upstream RPM (artifact pin, verified in %%prep; rpm 6
 # removed the standalone checksum tags from the spec syntax).
-%global upstream_sha256 f090867712ad3fd9fe28a42728a9239214c3398da79980361da0cb6b6971f4cb
+%global upstream_sha256 3a0417bfd1fd531add29487b5715a3a5adeefc9173991b0f2816c286f760ec99
 
 Name:           grok-bot
-Version:        0.78.1
-Release:        4%{?dist}
+Version:        0.78.3
+Release:        1%{?dist}
 Summary:        Grok Bot desktop agent
 
 License:        LicenseRef-Proprietary
@@ -148,7 +148,7 @@ test "$(stat -c %a %{buildroot}%{instdir}/chrome-sandbox)" = "4755"
 # Wrapper must exec the relocated binary.
 grep -Fxq 'exec %{instdir}/grok-bot "$@"' %{buildroot}%{_bindir}/%{name}
 # Visible desktop entry must point at the wrapper on PATH.
-# Upstream 0.78.1 inserts -- so a URL is not parsed as an option.
+# Upstream inserts -- so a URL is not parsed as an option.
 grep -Fq 'Exec=grok-bot -- %%U' %{buildroot}%{_datadir}/applications/grok-bot.desktop
 # Bundled AppArmor profile must reference the relocated path.
 grep -Fq 'profile "grok-bot" "%{instdir}/grok-bot"' %{buildroot}%{instdir}/resources/apparmor-profile
@@ -178,6 +178,10 @@ head -n1 %{buildroot}%{instdir}/resources/app.asar.unpacked/dist/deps/node-gyp-b
 %{_datadir}/icons/hicolor/512x512/apps/grok-bot.png
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 0.78.3-1
+- Update to 0.78.3
+- Update pinned upstream commit and RPM sha256
+
 * Thu Oct 29 2026 vitrasti <vitrasti@protonmail.com> - 0.78.1-4
 - Install under /usr/lib/grok-bot instead of /opt/grok-bot. On
   bootc/rpm-ostree /opt is a symlink, and RPM unpack fails with

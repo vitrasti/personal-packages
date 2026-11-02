@@ -11,7 +11,7 @@
 %global __brp_mangle_shebangs_exclude_from ^%{appdir}/hf[.]py$
 
 Name:           huggingface-cli
-Version:        2.3.0
+Version:        2.4.0
 Release:        1%{?dist}
 Summary:        Hugging Face Hub CLI with private Python dependencies
 # First-party license and bundled Python dependencies. Native hf-xet ships an SBOM.
@@ -126,6 +126,10 @@ install -Dpm0644 hf.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/hf.fi
 %{_datadir}/fish/vendor_completions.d/hf.fish
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 2.4.0-1
+- Update to huggingface-hub 2.4.0
+- Update pinned huggingface-hub wheel and source hashes
+
 * Fri Oct 23 2026 vitrasti <vitrasti@protonmail.com> - 2.3.0-1
 - Update to huggingface-hub 2.3.0
 

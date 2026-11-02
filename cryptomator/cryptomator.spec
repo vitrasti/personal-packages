@@ -9,7 +9,7 @@
 %global jfxver 25.0.3
 
 Name:           cryptomator
-Version:        1.19.5
+Version:        1.19.6
 Release:        1%{?dist}
 Summary:        Multiplatform transparent client-side encryption for cloud storage
 
@@ -177,6 +177,9 @@ update-mime-database %{_datadir}/mime &>/dev/null || :
 %{_datadir}/licenses/%{name}/
 
 %changelog
+* Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 1.19.6-1
+- Update to 1.19.6
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 1.19.5-1
 - Update to 1.19.5
 
