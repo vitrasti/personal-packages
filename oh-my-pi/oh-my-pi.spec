@@ -3,8 +3,8 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.15.0
-Release:        2%{?dist}
+Version:        18.16.0
+Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
 # First-party MIT plus bundled code/data licenses listed in upstream notices.
@@ -81,6 +81,9 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 18.16.0-1
+- Update to 18.16.0
+
 * Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 18.15.0-2
 - Fetch CLI and native addon notices from the versioned source tree
 

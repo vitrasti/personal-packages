@@ -4,7 +4,7 @@
    # extra and gets prepared through PM when the
    # user picks that backend. Smaller `dependencies` = smaller blast
    # radius for the next supply-chain attack.
--  "openai==2.24.0; python_version >= '3.14'",
+-  "openai==2.54.0; python_version >= '3.14'",
 -  "certifi==2026.10.19; python_version >= '3.14'",
 +  "openai",
 +  "certifi",
@@ -14,12 +14,12 @@
    # it regardless; it is no longer OUR trust source.
    # ssl_verify uses truststore's private original SSLContext for explicit CA overrides.
    # Keep this exact until that path has a public-API replacement.
--  "truststore==0.10.4; python_version >= '3.14'",
--  "python-dotenv==1.2.2; python_version >= '3.14'",
+-  "truststore==0.10.5; python_version >= '3.14'",
+-  "python-dotenv==1.2.4; python_version >= '3.14'",
 -  "fire==0.7.1; python_version >= '3.14'",
 -  "httpx[socks]==0.28.1; python_version >= '3.14'",
--  "rich==14.3.3; python_version >= '3.14'",
--  "tenacity==9.1.4; python_version >= '3.14'",
+-  "rich==14.3.4; python_version >= '3.14'",
+-  "tenacity==9.2.1; python_version >= '3.14'",
 -  "tomli-w==1.2.0; python_version >= '3.14'",  # Preserve relative dependency paths in staged plugin metadata.
 +  "truststore",
 +  "python-dotenv",
@@ -35,7 +35,7 @@
    # (plugin manifests, config) in pure Python: ~5 s of gateway startup on 1 vCPU.
    # Declared where clib ships a cp314 wheel; elsewhere hermes_yaml falls back to pure.
 -  "ruamel.yaml.clib==0.2.15; python_version >= '3.14' and platform_python_implementation == 'CPython' and (sys_platform == 'darwin' or (sys_platform == 'linux' and platform_machine in 'x86_64 aarch64 i686') or (sys_platform == 'win32' and platform_machine in 'AMD64 x86'))",
--  "requests==2.33.0; python_version >= '3.14'",  # CVE-2026-25645
+-  "requests==2.34.2; python_version >= '3.14'",  # CVE-2026-25645
 -  "jinja2==3.1.6; python_version >= '3.14'",
 +  "ruamel.yaml.clib; platform_python_implementation == 'CPython' and (sys_platform == 'darwin' or (sys_platform == 'linux' and platform_machine in 'x86_64 aarch64 i686') or (sys_platform == 'win32' and platform_machine in 'AMD64 x86'))",
 +  "requests",  # CVE-2026-25645
@@ -52,13 +52,13 @@
    # pydantic-core 2.41.5 (pulled by 2.12.5) segfaults when the OpenAI SDK's
    # Responses API resource is exercised from a non-main thread, which is the
    # codex_responses dispatch in agent/chat_completion_helpers.py:_call.
--  "pydantic==2.13.4; python_version >= '3.14'",
+-  "pydantic==2.14.1; python_version >= '3.14'",
 +  "pydantic",
    # Interactive CLI (prompt_toolkit is used directly by cli.py)
--  "prompt_toolkit==3.0.52; python_version >= '3.14'",
+-  "prompt_toolkit==3.0.53; python_version >= '3.14'",
 +  "prompt_toolkit",
    # Cron scheduler (built-in feature — scheduled cron/interval jobs use croniter).
--  "croniter==6.0.0; python_version >= '3.14'",
+-  "croniter==6.2.4; python_version >= '3.14'",
 +  "croniter",
    # Snowball stemming for tool_search's BM25 (tools/tool_search.py) —
    # official Snowball project package, pure Python, zero transitive deps.
@@ -68,7 +68,7 @@
 +  "snowballstemmer",
    # Requirement and version checks must work in lean installs without
    # relying on another package to bring packaging in transitively.
--  "packaging==26.0; python_version >= '3.14'",
+-  "packaging==26.3; python_version >= '3.14'",
 +  "packaging",
    # Markdown -> HTML conversion for rich message delivery (Matrix
    # `formatted_body`, and the `send_message` tool's HTML path). Now on the
@@ -77,7 +77,7 @@
    # (~108KB, no compiled extensions, no platform constraints), so unlike the
    # matrix extra's `mautrix`/`python-olm` it's safe to ship everywhere — keeps
    # it out of the lazy-install path that exists only for the heavy matrix deps.
--  "Markdown==3.10.2; python_version >= '3.14'",
+-  "Markdown==3.11.2; python_version >= '3.14'",
 +  "Markdown",
    # Skills Hub (GitHub App JWT auth — optional, only needed for bot identity)
 -  "PyJWT[crypto]==2.15.1; python_version >= '3.14'",  # PYSEC-2026-175/177/178/179 + GHSA-ffc3-869f-jxw9, GHSA-42vr-xj54-vc7v (fixed in 2.14.0/2.15.0)
@@ -96,7 +96,7 @@
    # A pin here is not sufficient on its own. alibabacloud-tea-openapi caps
    # cryptography<49, so [tool.uv] also holds an override. Read that comment
    # before you move this version.
--  "cryptography==50.0.1; python_version >= '3.14'",  # CVE-2026-69247, GHSA-m2h6-j472-rp4c, GHSA-jwv3-5hgf-82ww, CVE-2026-39892, CVE-2026-34073, GHSA-537c-gmf6-5ccf
+-  "cryptography==50.0.2; python_version >= '3.14'",  # CVE-2026-69247, GHSA-m2h6-j472-rp4c, GHSA-jwv3-5hgf-82ww, CVE-2026-39892, CVE-2026-34073, GHSA-537c-gmf6-5ccf
 +  "cryptography",  # CVE-2026-69247, GHSA-m2h6-j472-rp4c, GHSA-jwv3-5hgf-82ww, CVE-2026-39892, CVE-2026-34073, GHSA-537c-gmf6-5ccf
    # Windows has no IANA tzdata shipped with the OS, so Python's ``zoneinfo``
    # (PEP 615) raises ``ZoneInfoNotFoundError`` for every non-UTC timezone
@@ -110,7 +110,8 @@
    # Android Python 3.13+ needs upstream #2891 for platform recognition and
    # disk_partitions(). The fix is not in a published psutil release yet.
    # Keep this commit until a release includes it, then remove the source pin.
-   "psutil @ git+https://github.com/giampaolo/psutil.git@380bd2b59c67b0e1b04bbf3a90b11744f4f96644 ; sys_platform == 'android' and python_version >= '3.14'",
+-  "psutil @ git+https://github.com/giampaolo/psutil.git@380bd2b59c67b0e1b04bbf3a90b11744f4f96644 ; sys_platform == 'android' and python_version >= '3.14'",
++  "psutil; sys_platform == 'android'",
    # Browser CDP supervisor + browser_dialog import this directly. Keep core
    # so browser tool discovery doesn't fail on lean installs.
 -  "websockets==15.0.1; python_version >= '3.14'",
@@ -166,7 +167,7 @@
    # `hermes update`), so a source install carries its renderer instead of
    # preparing a separate environment at launch. abi3 wheels for every
    # shipped platform, including Windows ARM64 and Android.
--  "resvg-py==0.4.0; python_version >= '3.14'",
+-  "resvg-py==0.5.0; python_version >= '3.14'",
    # Windows log rotation. Stdlib ``RotatingFileHandler.doRollover()`` uses
    # ``os.rename()`` which fails with ``PermissionError [WinError 32]`` on
    # Windows whenever any other process holds an append-mode handle on
@@ -174,12 +175,26 @@
    # 738 CPython reports sys_platform == 'android' and never matched.) Pre-GKI
    # devices can still slip through; they get the same resolution failure as
    # before, worked around by installing with `--no-deps` or an older release.
--  "nemo-relay>=0.10,<0.11; ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64' and 'android' not in platform_release) or (sys_platform == 'linux' and platform_machine == 'aarch64' and 'android' not in platform_release) or (sys_platform == 'win32' and platform_machine == 'AMD64') or (sys_platform == 'win32' and platform_machine == 'ARM64')) and python_version >= '3.14'",]
-+]
+-  "nemo-relay>=0.11,<0.12; ((sys_platform == 'darwin' and platform_machine == 'arm64') or (sys_platform == 'linux' and platform_machine == 'x86_64' and 'android' not in platform_release) or (sys_platform == 'linux' and platform_machine == 'aarch64' and 'android' not in platform_release) or (sys_platform == 'win32' and platform_machine == 'AMD64') or (sys_platform == 'win32' and platform_machine == 'ARM64')) and python_version >= '3.14'",]
++  ]
  
  [project.optional-dependencies]
  # High-performance event loop — uvloop replaces the stdlib asyncio loop with
-@@ -559,7 +555,7 @@
+@@ -516,10 +512,10 @@
+ # and uvloop is gated behind the [uvloop] extra.  This keeps [web] safe for
+ # termux-all which includes it.
+ web = [
+-  "fastapi==0.133.1",
+-  "uvicorn==0.54.0",
++  "fastapi",
++  "uvicorn",
+   "starlette==1.9.0",
+-  "python-multipart==0.0.32",
++  "python-multipart",
+ ]
+ all = [
+   # Policy (2026-05-12): `[all]` includes only extras that genuinely
+@@ -580,7 +576,7 @@
  # PEP 517 isolated builds. Without wheel in
  # requires, the isolation sandbox only gets setuptools and the build
  # fails with ModuleNotFoundError: wheel.cli (#96488).
@@ -188,6 +203,24 @@
  build-backend = "setuptools.build_meta"
  
  [project.scripts]
+@@ -646,7 +642,7 @@
+   # Keep this exact version equal to the direct dependency. uv overrides
+   # replace that requirement too, not only the vendor's upper bound.
+   # Remove this line when alibabacloud-tea-openapi lifts the cap.
+-  "cryptography==50.0.2",
++  "cryptography",
+   # browser-harness 0.1.13 (core dependency, latest release) pins
+   # pillow==12.3.0 exactly, which holds Pillow below 13.0.0, the first
+   # release fixing GHSA-8g5g-8vmr-9782, GHSA-w889-685w-c8fh and the rest of
+@@ -658,7 +654,7 @@
+   # because uv.lock records this override (pm/pip_check.py).
+   # Remove this line when browser-harness allows Pillow 13. Plugin workspaces
+   # inherit [tool.uv], so a plugin requiring pillow<13 also gets 13.0.0.
+-  "Pillow==13.0.0",
++  "Pillow",
+   # misaki[en] (pulled by [kittentts]) lists spacy-curated-transformers.
+   # The newest release that fits spacy 3.8 (2.x needs thinc 9), 0.3.1, caps
+   # Python below 3.14, so PM's `uv pip check` rejects the venv. Nothing
 --- a/setup.py
 +++ b/setup.py
 @@ -31,7 +31,7 @@

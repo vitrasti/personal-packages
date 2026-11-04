@@ -1,5 +1,5 @@
 Name:           handy
-Version:        0.9.8
+Version:        0.10.0
 Release:        1%{?dist}
 Summary:        Free, open-source, offline speech-to-text application
 License:        MIT
@@ -57,6 +57,9 @@ rpm2cpio %{SOURCE0} | cpio -idmv -D %{buildroot}
 /usr/share/icons/hicolor/256x256@2/apps/handy.png
 
 %changelog
+* Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 0.10.0-1
+- Update to 0.10.0
+
 * Sun Oct 04 2026 vitrasti <vitrasti@protonmail.com> - 0.9.8-1
 - Update to 0.9.8
 
