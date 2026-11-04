@@ -1,0 +1,42 @@
+--- a/package.json
++++ b/package.json
+@@ -70,7 +70,7 @@
+     "@vitest/mocker": "4.1.12"
+   },
+   "engines": {
+-    "node": ">=26",
++    "node": "^22.22.0 || ^24.11.0 || >=26.0.0",
+     "npm": "<11.10.0 || >=11.17.0"
+   },
+   "allowScripts": {
+--- a/apps/desktop/package.json
++++ b/apps/desktop/package.json
+@@ -12,7 +12,7 @@
+   "type": "module",
+   "main": "dist/electron-main.mjs",
+   "engines": {
+-    "node": ">=26"
++    "node": "^22.22.0 || ^24.11.0 || >=26.0.0"
+   },
+   "scripts": {
+     "clean": "npm run clean:e2e && npm run clean:renderer && npm run clean:electron",
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -32,7 +32,7 @@
+         "typescript-eslint": "8.71.1"
+       },
+       "engines": {
+-        "node": ">=26",
++        "node": "^22.22.0 || ^24.11.0 || >=26.0.0",
+         "npm": "<11.10.0 || >=11.17.0"
+       }
+     },
+@@ -192,7 +192,7 @@
+         "ws": "8.22.0"
+       },
+       "engines": {
+-        "node": ">=26"
++        "node": "^22.22.0 || ^24.11.0 || >=26.0.0"
+       },
+       "optionalDependencies": {
+         "get-windows": "9.3.0"
