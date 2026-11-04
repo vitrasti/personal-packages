@@ -33,7 +33,7 @@
 
 Name:           ghostty
 Version:        1.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration
 
 License:        MIT
@@ -95,28 +95,17 @@ echo "%{upstream_sha256}  %{SOURCE0}" | sha256sum -c -
 %setup -q -n ghostty-%{version}
 
 %build
-# Compile only. The install runs in %install: rpmbuild wipes %{buildroot}
-# when %install starts, so a DESTDIR install here would be discarded.
+# zig's default step is "install". Running it here writes to --prefix (/usr);
+# mockbuild cannot, so the build fails with AccessDenied. rpmbuild also wipes
+# the buildroot at the start of %%install, so stage the install there instead.
+:
+
+%install
 # Link the system fontconfig/freetype/harfbuzz rather than letting zig vendor
 # them. Without -fsys=, zig statically links its own copies *and* exports their
 # symbols from the executable, while GTK4 separately pulls in the system libs.
 # The executable wins global symbol resolution, so GTK's Fc*/FT_*/hb_* calls are
 # interposed into the vendored copies while operating on system-lib state.
-zig build \
-    --summary all \
-    --prefix "%{_prefix}" \
-    -fsys=fontconfig \
-    -fsys=freetype \
-    -fsys=harfbuzz \
-    -Dversion-string=%{version}-%{release} \
-    -Doptimize=ReleaseFast \
-    -Dcpu=baseline \
-    -Dpie=true \
-    -Dstrip=false \
-    -Demit-docs \
-    -Demit-themes=true
-
-%install
 DESTDIR=%{buildroot} zig build \
     --summary all \
     --prefix "%{_prefix}" \
@@ -220,6 +209,11 @@ test ! -e "%{buildroot}%{_prefix}/share/systemd/user"
 %{_prefix}/share/pkgconfig/libghostty-vt-static.pc
 
 %changelog
+* Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-2
+- Do not run zig build in %%build. Its default step installs to /usr, which
+  mockbuild cannot write, so the COPR build failed with AccessDenied.
+  Stage the install in %%install with DESTDIR.
+
 * Tue Nov 03 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-1
 - Initial package for personal COPR (spec adapted from the scottames/ghostty
   COPR)
