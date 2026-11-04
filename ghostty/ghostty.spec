@@ -33,7 +33,7 @@
 
 Name:           ghostty
 Version:        1.4.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration
 
 License:        MIT
@@ -176,8 +176,8 @@ test ! -e "%{buildroot}%{_prefix}/share/systemd/user"
 %{_prefix}/share/icons/hicolor/32x32@2/apps/com.mitchellh.ghostty.png
 %{_prefix}/share/icons/hicolor/512x512/apps/com.mitchellh.ghostty.png
 %{_prefix}/share/kio/servicemenus/com.mitchellh.ghostty.desktop
-%{_prefix}/share/man/man1/ghostty.1
-%{_prefix}/share/man/man5/ghostty.5
+%{_mandir}/man1/ghostty.1*
+%{_mandir}/man5/ghostty.5*
 %{_prefix}/share/nautilus-python/extensions/ghostty.py
 %{_prefix}/share/nvim/site/compiler/ghostty.vim
 %{_prefix}/share/nvim/site/ftdetect/ghostty.vim
@@ -209,6 +209,10 @@ test ! -e "%{buildroot}%{_prefix}/share/systemd/user"
 %{_prefix}/share/pkgconfig/libghostty-vt-static.pc
 
 %changelog
+* Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-3
+- Match gzipped man pages. brp-compress renames ghostty.1 and ghostty.5
+  to *.gz, so the uncompressed %%files entries were missing.
+
 * Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-2
 - Do not run zig build in %%build. Its default step installs to /usr, which
   mockbuild cannot write, so the COPR build failed with AccessDenied.
