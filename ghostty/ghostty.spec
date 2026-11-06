@@ -33,7 +33,7 @@
 
 Name:           ghostty
 Version:        1.4.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration
 
 License:        MIT
@@ -58,7 +58,10 @@ BuildRequires: pixman-devel
 BuildRequires: pkg-config
 BuildRequires: pkgconfig(egl)
 BuildRequires: wayland-protocols-devel
-BuildRequires: zig017 = 0.17.1
+# Upstream accepts any 0.17.x patch release starting at 0.17.0.
+# Do not require an unpublished companion update during simultaneous COPR builds.
+BuildRequires: zig017 >= 0.17.0
+BuildRequires: zig017 < 0.18.0
 BuildRequires: zlib-ng-devel
 
 Requires: fontconfig
@@ -209,6 +212,10 @@ test ! -e "%{buildroot}%{_prefix}/share/systemd/user"
 %{_prefix}/share/pkgconfig/libghostty-vt-static.pc
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-5
+- Accept supported Zig 0.17.x patch releases instead of pinning 0.17.1
+- Avoid dependency resolution failures when zig017 and ghostty rebuild together
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-4
 - Update the pinned zig017 build dependency to 0.17.1
 

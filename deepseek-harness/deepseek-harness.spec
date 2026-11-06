@@ -14,7 +14,7 @@
 
 Name:           deepseek-harness
 Version:        0.2.2~rc.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Plugin-based AI agent harness with a Web UI and automation profiles
 
 # First-party MIT plus bundled runtime dependencies; retain their license files.
@@ -25,11 +25,13 @@ Source1:        %{url}/raw/dsh-v%{upstream_version}/THIRD_PARTY_NOTICES.md#/%{na
 Source2:        %{url}/raw/dsh-v%{upstream_version}/README.md#/%{name}-%{upstream_version}-README.md
 
 ExclusiveArch:  x86_64
-BuildRequires:  nodejs >= 1:24.9.0
-BuildRequires:  npm
+# Fedora ships Node 24 as a parallel-installable, versioned package.
+# Use its versioned executable and npm payload, not the default Node 22 wrappers.
+BuildRequires:  nodejs24 >= 1:24.9.0
+BuildRequires:  nodejs24-npm
 BuildRequires:  python3
 BuildRequires:  patchelf
-Requires:       nodejs >= 1:24.9.0
+Requires:       nodejs24 >= 1:24.9.0
 Requires:       bash
 # Suggestions do not pull optional desktop tools into Fedora CoreOS images.
 Suggests:       git
@@ -70,7 +72,7 @@ cat > package.json <<'EOF'
 EOF
 
 cat > dsh.mjs <<'EOF'
-#!/usr/bin/node
+#!%{_bindir}/node-24
 import { fileURLToPath } from 'node:url';
 import { runCli } from '@deepseek-ai/dsh/lib/bin.js';
 await runCli({
@@ -86,7 +88,8 @@ EOF
 # COPR downloads dependencies here, never when installing/running the RPM.
 # Skip arbitrary lifecycle scripts: all native modules have published prebuilds.
 export npm_config_cache="$PWD/.npm-cache"
-npm install --ignore-scripts --omit=dev --no-audit --no-fund
+%{_bindir}/node-24 %{_prefix}/lib/node_modules_24/npm/bin/npm-cli.js \
+    install --ignore-scripts --omit=dev --no-audit --no-fund
 %{python3} - <<'PY'
 import json
 from pathlib import Path
@@ -122,7 +125,7 @@ Path('BUNDLED-PACKAGES.json').write_text(json.dumps(inventory, indent=2) + '\n')
 (modules / '.package-lock.json').unlink(missing_ok=True)
 PY
 # Reproduce the one necessary postinstall: restore helper executable bits.
-node node_modules/@deepseek-ai/dsh-subprocess-local/scripts/ensure-spawn-helper.mjs
+%{_bindir}/node-24 node_modules/@deepseek-ai/dsh-subprocess-local/scripts/ensure-spawn-helper.mjs
 
 %install
 install -dm0755 %{buildroot}%{_libdir}/deepseek-harness %{buildroot}%{_bindir}
@@ -186,7 +189,7 @@ with tempfile.TemporaryDirectory(prefix='dsh-check-') as temp:
         });
         require('node:child_process').execFileSync(require('@vscode/ripgrep').rgPath, ['--version']);
     """
-    subprocess.run(['node', '--input-type=module', '-e', native, launcher],
+    subprocess.run(['%{_bindir}/node-24', '--input-type=module', '-e', native, launcher],
                    cwd=temp, env=env, check=True, timeout=60)
     log = Path(temp) / 'web.log'
     with log.open('w') as output:
@@ -230,6 +233,10 @@ PY
 %{_libdir}/deepseek-harness/
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.1-2
+- Require Fedora's nodejs24 and nodejs24-npm packages instead of nodejs >=24
+- Use node-24 explicitly for npm, helper preparation, the launcher and checks
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.1-1
 - Update to 0.2.2-rc.1
 - Require Node.js >=24.9.0 to match upstream
