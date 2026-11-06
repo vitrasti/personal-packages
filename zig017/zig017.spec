@@ -1,11 +1,11 @@
 # Ghostty 1.4.0 mandates Zig 0.17.0 (build.zig.zon minimum_zig_version), while
 # Fedora's zig package is 0.16.0 even on rawhide. This package repackages the
-# official upstream prebuilt Zig 0.17.0 toolchain so Ghostty can be built in
+# official upstream prebuilt Zig 0.17.1 toolchain so Ghostty can be built in
 # this COPR independently of Fedora's default Zig release.
 %global debug_package %{nil}
 
 Name:           zig017
-Version:        0.17.0
+Version:        0.17.1
 Release:        1%{?dist}
 Summary:        General-purpose programming language and toolchain
 
@@ -19,11 +19,11 @@ Conflicts:      zig
 
 %ifarch x86_64
 %global upstream_source %{SOURCE0}
-%global upstream_sha256 1cbe9df9f27e6b78d14ccbca43b6703a404ef79ef1c463de901d7f088d4e2026
+%global upstream_sha256 3581863e3cbcfd0fce0efc682ce7e9e93da96668a977791d356a26d2a7e9b17a
 %endif
 %ifarch aarch64
 %global upstream_source %{SOURCE1}
-%global upstream_sha256 9e8d11661d4ae3bd57702a3832781e23ad151dde5798e16a5ccd503f65234ff8
+%global upstream_sha256 a1546d5646eb184437918d6635ca6b762a0e889eac09cef720ee7a1ed3fe7795
 %endif
 
 ExclusiveArch:  x86_64 aarch64
@@ -69,6 +69,10 @@ test "$(%{buildroot}%{_bindir}/zig version)" = "%{version}"
 %{_prefix}/lib/zig/
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.17.1-1
+- Update to 0.17.1
+- Update pinned sha256 checksums for both upstream toolchains
+
 * Tue Nov 03 2026 vitrasti <vitrasti@protonmail.com> - 0.17.0-1
 - Initial package for personal COPR; repackaged upstream prebuilt Zig,
   required to build Ghostty 1.4.0 (spec adapted from the scottames/ghostty COPR)

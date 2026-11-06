@@ -1,7 +1,7 @@
 # Personal COPR package; buildroot network access must be enabled.
 # Install the published npm application and native prebuilds at build time.
 # Application/pnpm versions are pinned; transitive ranges resolve during build.
-%global upstream_version 0.2.1-rc.5
+%global upstream_version 0.2.2-rc.1
 %global pnpm_version 11.7.0
 %global debug_package %{nil}
 %global __strip /bin/true
@@ -13,7 +13,7 @@
 %global __requires_exclude ^(libonnxruntime[.]so|libsherpa-onnx-c-api[.]so|libvips-cpp[.]so[.]8[.]18[.]7)[(].*$
 
 Name:           deepseek-harness
-Version:        0.2.1~rc.5
+Version:        0.2.2~rc.1
 Release:        1%{?dist}
 Summary:        Plugin-based AI agent harness with a Web UI and automation profiles
 
@@ -25,11 +25,11 @@ Source1:        %{url}/raw/dsh-v%{upstream_version}/THIRD_PARTY_NOTICES.md#/%{na
 Source2:        %{url}/raw/dsh-v%{upstream_version}/README.md#/%{name}-%{upstream_version}-README.md
 
 ExclusiveArch:  x86_64
-BuildRequires:  nodejs >= 1:22.19.0
+BuildRequires:  nodejs >= 1:24.9.0
 BuildRequires:  npm
 BuildRequires:  python3
 BuildRequires:  patchelf
-Requires:       nodejs >= 1:22.19.0
+Requires:       nodejs >= 1:24.9.0
 Requires:       bash
 # Suggestions do not pull optional desktop tools into Fedora CoreOS images.
 Suggests:       git
@@ -230,6 +230,10 @@ PY
 %{_libdir}/deepseek-harness/
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.1-1
+- Update to 0.2.2-rc.1
+- Require Node.js >=24.9.0 to match upstream
+
 * Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 0.2.1~rc.5-1
 - Update to 0.2.1~rc.5
 

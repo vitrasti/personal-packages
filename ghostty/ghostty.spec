@@ -33,7 +33,7 @@
 
 Name:           ghostty
 Version:        1.4.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration
 
 License:        MIT
@@ -58,7 +58,7 @@ BuildRequires: pixman-devel
 BuildRequires: pkg-config
 BuildRequires: pkgconfig(egl)
 BuildRequires: wayland-protocols-devel
-BuildRequires: zig017 = 0.17.0
+BuildRequires: zig017 = 0.17.1
 BuildRequires: zlib-ng-devel
 
 Requires: fontconfig
@@ -209,6 +209,9 @@ test ! -e "%{buildroot}%{_prefix}/share/systemd/user"
 %{_prefix}/share/pkgconfig/libghostty-vt-static.pc
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-4
+- Update the pinned zig017 build dependency to 0.17.1
+
 * Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 1.4.0-3
 - Match gzipped man pages. brp-compress renames ghostty.1 and ghostty.5
   to *.gz, so the uncompressed %%files entries were missing.

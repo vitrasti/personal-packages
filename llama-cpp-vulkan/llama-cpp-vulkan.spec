@@ -4,11 +4,11 @@
 # collected; enable buildroot networking for that.
 # References: sneed/llama-cpp-vulkan and lacamar/arm64-misc on COPR.
 %global upstream_tag v%{version}
-%global llama_build_number 11960
-%global llama_build_commit 8642541b255bfb5dc39cd351a178be09013a55d6
+%global llama_build_number 12110
+%global llama_build_commit cd959bae99ff4bed22bef2604f45241c09bbb8c8
 # sha256 of the official llama-bN-ui.tar.gz asset for llama_build_number.
 # Update this whenever llama_build_number changes.
-%global ui_sha256 f27576af534ac990a6c802fc5b6c7651e0a2c0b6ac857ba995bc343cf8a3b934
+%global ui_sha256 b6274bb06ebb3f285fa9727e88f22abdedd8490fff604366b420fb06357f1da8
 %global privlibdir %{_libdir}/%{name}
 # Keep bundled ggml/llama libraries private to this application. Their internal
 # dependencies are satisfied by this RPM, not by another ggml consumer.
@@ -16,8 +16,8 @@
 %global __requires_exclude ^lib(ggml[^ ]*|llama[^ ]*|mtmd)[.]so.*$
 
 Name:           llama-cpp-vulkan
-Version:        0.8.0
-Release:        2%{?dist}
+Version:        0.9.0
+Release:        1%{?dist}
 Summary:        Local LLM inference tools and HTTP server with Vulkan acceleration
 # Includes bundled C/C++ code and the compiled, locked upstream Web UI.
 License:        MIT AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND 0BSD AND Zlib AND CC0-1.0 AND Unlicense AND OFL-1.1 AND BlueOak-1.0.0 AND MPL-2.0 AND LGPL-3.0-or-later AND Python-2.0 AND CC-BY-4.0
@@ -176,6 +176,11 @@ PY
 %{privlibdir}/lib*.so*
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.9.0-1
+- Update to 0.9.0
+- Update build number and commit to match upstream release tag
+- Update the matching b12110 Web UI asset and pinned sha256 checksum
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 0.8.0-2
 - Embed the official b11960 Web UI instead of running vite on COPR
 - The vite client build exceeds the 2048 MiB builder limit

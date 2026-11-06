@@ -2,8 +2,8 @@
 # Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
-Version:        0.22.7
-Release:        2%{?dist}
+Version:        0.23.0
+Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -21,7 +21,7 @@ Patch1:         managed-update.patch
 Patch2:         python315-compat.patch
 # Make the RPM-built Electron artifact use external package updates.
 Patch3:         rpm-desktop-update.patch
-# Upstream 0.22.7 requires Node >=26, but Fedora 43-45 ship Node 22/24.
+# Upstream requires Node >=26, but Fedora 43-45 ship Node 22/24.
 # Restore the previously supported range so the RPM builds with distro Node.
 Patch4:         node22-engines.patch
 
@@ -207,6 +207,10 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.23.0-1
+- Update to 0.23.0
+- Refresh relax-deps.patch for upstream setuptools 84.1.0 build requirement
+
 * Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 0.22.7-2
 - Restore the previous Node engines range (^22.22.0 || ^24.11.0 || >=26.0.0)
   so npm ci works with Fedora's Node 22; 0.22.7 raised it to >=26

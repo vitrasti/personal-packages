@@ -3,7 +3,7 @@
 # access during builds).
 
 Name:           bitwarden
-Version:        2026.10.3
+Version:        2026.10.4
 Release:        1%{?dist}
 Summary:        Bitwarden Desktop
 License:        GPL-3.0-only
@@ -48,7 +48,7 @@ and other immutable Fedora variants.
 curl -L -o bitwarden.rpm "https://github.com/bitwarden/clients/releases/download/desktop-v%{version}/Bitwarden-%{version}-x86_64.rpm"
 # Pin the upstream RPM checksum. Update this on every version bump
 # (sha256sum Bitwarden-%{version}-x86_64.rpm).
-echo "02dd9ab3a5be8cb16649b46ede0d7b2e70f6ea00f4c7c569f2501398e3690b23  bitwarden.rpm" | sha256sum -c -
+echo "09abe8983dc493e107e9ae6f7b3f164cf58141cf4e74456611d7200d514576fd  bitwarden.rpm" | sha256sum -c -
 
 %install
 mkdir -p %{buildroot}
@@ -84,6 +84,10 @@ chmod 4755 %{buildroot}%{instdir}/chrome-sandbox
 %{_datadir}/icons/hicolor/*/apps/bitwarden.png
 
 %changelog
+* Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.4-1
+- Update to 2026.10.4
+- Update pinned sha256 checksum for upstream RPM
+
 * Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.3-1
 - Update to 2026.10.3
 - Update pinned sha256 checksum for upstream RPM

@@ -198,7 +198,7 @@
  # PEP 517 isolated builds. Without wheel in
  # requires, the isolation sandbox only gets setuptools and the build
  # fails with ModuleNotFoundError: wheel.cli (#96488).
--requires = ["setuptools==83.0.0", "wheel"]
+-requires = ["setuptools==84.1.0", "wheel"]
 +requires = ["setuptools", "wheel"]
  build-backend = "setuptools.build_meta"
  
