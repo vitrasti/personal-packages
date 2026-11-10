@@ -5,7 +5,7 @@
 %global __strip /bin/true
 
 Name:           rtk-oss
-Version:        1.1.0
+Version:        1.2.0
 Release:        1%{?dist}
 Summary:        Apache-2.0-only edition of rtk, a CLI proxy that reduces LLM token consumption
 
@@ -58,6 +58,9 @@ install -Dpm0755 rtk %{buildroot}%{_bindir}/rtk
 %{_bindir}/rtk
 
 %changelog
+* Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 1.2.0-1
+- Update to 1.2.0
+
 * Wed Oct 28 2026 vitrasti <vitrasti@protonmail.com> - 1.1.0-1
 - Initial package for personal COPR
 - Install official prebuilt Linux release binary (Apache-2.0-only edition, no engine)

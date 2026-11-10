@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           signal-cli
-Version:        0.14.9
+Version:        0.14.10
 Release:        1%{?dist}
 Summary:        Commandline interface for the Signal messenger
 
@@ -52,6 +52,9 @@ install -Dpm0755 signal-cli %{buildroot}%{_bindir}/signal-cli
 %{_bindir}/signal-cli
 
 %changelog
+* Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 0.14.10-1
+- Update to 0.14.10
+
 * Wed Oct 07 2026 vitrasti <vitrasti@protonmail.com> - 0.14.9-1
 - Initial package for personal COPR
 - Install official prebuilt GraalVM native image (x86_64 only)

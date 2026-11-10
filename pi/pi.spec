@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           pi
-Version:        1.5.0
+Version:        1.5.2
 Release:        1%{?dist}
 Summary:        AI coding agent CLI with read, bash, edit, write tools and session management
 
@@ -74,6 +74,9 @@ ln -s ../%{_lib}/pi/pi %{buildroot}%{_bindir}/pi
 %{_bindir}/pi
 
 %changelog
+* Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 1.5.2-1
+- Update to 1.5.2
+
 * Wed Nov 04 2026 vitrasti <vitrasti@protonmail.com> - 1.5.0-1
 - Update to 1.5.0
 

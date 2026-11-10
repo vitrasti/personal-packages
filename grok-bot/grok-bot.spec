@@ -28,13 +28,13 @@
 
 # Upstream release commit; artifacts are pinned to it. Find the current
 # one from the update feed (see build-command.md).
-%global upstream_commit 676f0815a4013954f4c8e3f4ac413acfbac0376c
+%global upstream_commit 473941287261c3efa92c6b2a0bf7e1caad1a2ef2
 # sha256 of the upstream RPM (artifact pin, verified in %%prep; rpm 6
 # removed the standalone checksum tags from the spec syntax).
-%global upstream_sha256 787700fc424f94459cc27a6c12c489fa3fca9d0644b07d43192063eb3207d1f6
+%global upstream_sha256 606198bdcadf139ee5fa50300bbb0822e076c3ab3b8ffd9401a27a2dd84cb50f
 
 Name:           grok-bot
-Version:        0.79.2
+Version:        0.79.3
 Release:        1%{?dist}
 Summary:        Grok Bot desktop agent
 
@@ -178,6 +178,10 @@ head -n1 %{buildroot}%{instdir}/resources/app.asar.unpacked/dist/deps/node-gyp-b
 %{_datadir}/icons/hicolor/512x512/apps/grok-bot.png
 
 %changelog
+* Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 0.79.3-1
+- Update to 0.79.3
+- Update pinned upstream commit and RPM sha256 checksum
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.79.2-1
 - Update to 0.79.2
 - Update pinned upstream commit and RPM sha256 checksum
