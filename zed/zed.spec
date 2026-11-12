@@ -7,7 +7,7 @@
 %global rustflags_debuginfo 0
 
 Name:           zed
-Version:        1.27.0
+Version:        1.28.1
 Release:        1%{?dist}
 Summary:        High-performance, multiplayer code editor
 
@@ -105,6 +105,11 @@ install -Dm644 %{appid}.metainfo.xml %{buildroot}%{_metainfodir}/%{appid}.metain
 %{_metainfodir}/%{appid}.metainfo.xml
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 1.28.1-1
+- Update to 1.28.1
+- Optional automatic Git fetching, resizable Refs column in the Git Graph
+- ACP agent compatibility improvements; drag Git Panel files into terminal/editor
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 1.27.0-1
 - Update to 1.27.0
 

@@ -2,7 +2,7 @@
 # Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
-Version:        0.23.0
+Version:        0.23.1
 Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
@@ -207,6 +207,11 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.23.1-1
+- Update to 0.23.1
+- Raise plugin catalog size cap 2 MiB -> 16 MiB so the live catalog is used
+  again instead of silently falling back to the shipped one
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.23.0-1
 - Update to 0.23.0
 - Refresh relax-deps.patch for upstream setuptools 84.1.0 build requirement

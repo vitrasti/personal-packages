@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.11.5
+Version:        2026.11.7
 Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
@@ -80,6 +80,11 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.7-1
+- Update to 2026.11.7
+- mise run --multi checklist picker, shims.fallback_to_installed,
+  task run history in tasks info/ls --json
+
 * Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.5-1
 - Update to 2026.11.5
 

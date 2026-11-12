@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.18.6
+Version:        18.19.0
 Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
@@ -81,6 +81,11 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 18.19.0-1
+- Update to 18.19.0
+- Add Liquid AI provider and judge models (d1.1, d1-ultra)
+- Fix Gemini CLI/Antigravity thought-signature and quota-bucket handling
+
 * Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 18.18.6-1
 - Update to 18.18.6
 

@@ -13,8 +13,8 @@
 %global __requires_exclude ^(libonnxruntime[.]so|libsherpa-onnx-c-api[.]so|libvips-cpp[.]so[.]8[.]18[.]7)[(].*$
 
 Name:           deepseek-harness
-Version:        0.2.2~rc.1
-Release:        2%{?dist}
+Version:        0.2.2~rc.2
+Release:        1%{?dist}
 Summary:        Plugin-based AI agent harness with a Web UI and automation profiles
 
 # First-party MIT plus bundled runtime dependencies; retain their license files.
@@ -233,6 +233,11 @@ PY
 %{_libdir}/deepseek-harness/
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.2-1
+- Update to 0.2.2-rc.2
+- Git worktree review with GitHub review sync, named/multi-level
+  SubAgent collaboration with per-session AgentTeam
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.1-2
 - Require Fedora's nodejs24 and nodejs24-npm packages instead of nodejs >=24
 - Use node-24 explicitly for npm, helper preparation, the launcher and checks
