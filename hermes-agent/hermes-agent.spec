@@ -3,7 +3,7 @@
 
 Name:           hermes-agent
 Version:        0.23.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -30,23 +30,15 @@ BuildRequires:  python3-devel
 BuildRequires:  python3dist(wheel)
 %if 0%{?fedora} >= 44
 BuildRequires:  nodejs22-bin >= 1:22.22.0
-BuildRequires:  nodejs22-npm-bin
 # Full ICU data is only a weak dep; without it Intl.Segmenter segfaults
 # (Rolldown calls it) in mock, which skips weak deps.
 BuildRequires:  nodejs22-full-i18n
-# Upstream accepts npm <11.10.0 or >=11.17.0; Fedora's Node 22 uses npm 10.
-# nodejs22-npm epoch was bumped 1 -> 2 on F45; keep the guard per epoch.
-%if 0%{?fedora} >= 45
-BuildRequires:  nodejs22-npm < 2:11.10.0
-%else
-BuildRequires:  nodejs22-npm < 1:11.10.0
-%endif
 %else
 # F43 ships Node 22 as the mainline nodejs package.
 BuildRequires:  nodejs >= 1:22.22.0
-BuildRequires:  nodejs-npm
 BuildRequires:  nodejs-full-i18n
 %endif
+BuildRequires:  curl
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  libX11-devel
@@ -72,7 +64,6 @@ Requires:       python3dist(httpx)
 # httpx[socks] extra; Fedora's python3-httpx does not Provide the extra.
 Requires:       python3dist(socksio)
 Requires:       python3dist(rich)
-Requires:       python3dist(tenacity)
 Requires:       python3dist(tomli-w)
 Requires:       python3dist(ruamel-yaml)
 Requires:       python3dist(requests)
@@ -137,12 +128,25 @@ export HERMES_RPM_BUILD=1
 # COPR networking is enabled for this personal project. Lockfile-controlled
 # downloads, native bindings and Electron packaging happen only in the build.
 node --version
-npm --version
-npm ci
+# pnpm 12 is a standalone executable, pinned with its digest in upstream's
+# PM lock. Keep it and all download/cache state inside the build tree.
+export TMPDIR="$PWD/.rpm-tmp"
+export XDG_CACHE_HOME="$PWD/.rpm-cache"
+export XDG_DATA_HOME="$PWD/.rpm-data"
+mkdir -p "$TMPDIR" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" .rpm-tools/pnpm
+read -r PNPM_URL PNPM_SHA256 < <(%{python3} -c 'import json; p = json.load(open("pm/lock.json"))["packages"]["pnpm"]["artifacts"]["linux-x64"][0]; print(p["url"], p["sha256"])')
+curl -fL --retry 3 "$PNPM_URL" -o .rpm-tools/pnpm.tgz
+printf '%s  %s\n' "$PNPM_SHA256" .rpm-tools/pnpm.tgz | sha256sum -c -
+tar -xzf .rpm-tools/pnpm.tgz -C .rpm-tools/pnpm --strip-components=1
+export PATH="$PWD/.rpm-tools/pnpm:$PATH"
+pnpm --version
+# This also prepares the locked Electron runtime; pnpm itself skips its
+# acquisition script. The helper enforces the pin and frozen lockfile.
+node scripts/build/node-deps.mjs --source "$PWD" --workspace apps/desktop
 node apps/desktop/scripts/stage-native-deps.mjs --source "$PWD" --out "$PWD/apps/desktop/build/native-deps"
 export HERMES_PAYLOAD_VERSION=%{version}
-npm run build --workspace apps/desktop
-npm run builder --workspace apps/desktop -- --native-deps "$PWD/apps/desktop/build/native-deps" --linux --x64 --dir
+pnpm --dir apps/desktop run build
+pnpm --dir apps/desktop run builder --native-deps "$PWD/apps/desktop/build/native-deps" --linux --x64 --dir
 test -x apps/desktop/release/linux-unpacked/Hermes
 test -f apps/desktop/release/linux-unpacked/resources/app.asar
 
@@ -207,6 +211,11 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.23.1-2
+- Refresh dependency patch after upstream removed tenacity
+- Refresh Node engines patch for upstream's pnpm migration
+- Build desktop with checksum-verified PM-pinned pnpm and frozen lockfile
+
 * Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.23.1-1
 - Update to 0.23.1
 - Raise plugin catalog size cap 2 MiB -> 16 MiB so the live catalog is used
