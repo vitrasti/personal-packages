@@ -4,11 +4,11 @@
 # collected; enable buildroot networking for that.
 # References: sneed/llama-cpp-vulkan and lacamar/arm64-misc on COPR.
 %global upstream_tag v%{version}
-%global llama_build_number 12110
-%global llama_build_commit cd959bae99ff4bed22bef2604f45241c09bbb8c8
+%global llama_build_number 12359
+%global llama_build_commit b1b770d90d94cad9e9ea5b993bdbc383a522fb28
 # sha256 of the official llama-bN-ui.tar.gz asset for llama_build_number.
 # Update this whenever llama_build_number changes.
-%global ui_sha256 b6274bb06ebb3f285fa9727e88f22abdedd8490fff604366b420fb06357f1da8
+%global ui_sha256 e472d0c86a08db419177563b19ab1aac316deb5b18d8dd53c7dc89a79dd78683
 %global privlibdir %{_libdir}/%{name}
 # Keep bundled ggml/llama libraries private to this application. Their internal
 # dependencies are satisfied by this RPM, not by another ggml consumer.
@@ -16,7 +16,7 @@
 %global __requires_exclude ^lib(ggml[^ ]*|llama[^ ]*|mtmd)[.]so.*$
 
 Name:           llama-cpp-vulkan
-Version:        0.9.0
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Local LLM inference tools and HTTP server with Vulkan acceleration
 # Includes bundled C/C++ code and the compiled, locked upstream Web UI.
@@ -176,6 +176,12 @@ PY
 %{privlibdir}/lib*.so*
 
 %changelog
+* Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 1.0.0-1
+- Update to 1.0.0
+- Update build number and commit to match upstream release tag b12359
+- Update the matching b12359 Web UI asset and pinned sha256 checksum
+- Redesigned server UI, /v1/audio/speech, OCP FP8 KV cache, llama.h cleanup
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 0.9.0-1
 - Update to 0.9.0
 - Update build number and commit to match upstream release tag

@@ -1,5 +1,5 @@
 Name:           gallery-dl
-Version:        1.32.19
+Version:        1.32.20
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 Summary:        Command-line program to download image galleries and collections
@@ -81,6 +81,11 @@ fish command line completion support for %{name}.
 
 
 %changelog
+* Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 1.32.20-1
+- Update to 1.32.20
+- New extractors: tw6, tistory, Twitter reposts/articles, onlyhaven DMs
+- E621 mirrors: blep.art, hmofa.gallery, floofgens.net
+
 * Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 1.32.19-1
 - Update to 1.32.19
 

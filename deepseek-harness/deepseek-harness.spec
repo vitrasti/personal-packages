@@ -1,8 +1,8 @@
 # Personal COPR package; buildroot network access must be enabled.
 # Install the published npm application and native prebuilds at build time.
 # Application/pnpm versions are pinned; transitive ranges resolve during build.
-%global upstream_version 0.2.2-rc.1
-%global pnpm_version 11.7.0
+%global upstream_version 0.2.2-rc.3
+%global pnpm_version 11.28.5
 %global debug_package %{nil}
 %global __strip /bin/true
 # Preserve upstream helper/skill shebangs; these are private application assets.
@@ -13,7 +13,7 @@
 %global __requires_exclude ^(libonnxruntime[.]so|libsherpa-onnx-c-api[.]so|libvips-cpp[.]so[.]8[.]18[.]7)[(].*$
 
 Name:           deepseek-harness
-Version:        0.2.2~rc.2
+Version:        0.2.2~rc.3
 Release:        1%{?dist}
 Summary:        Plugin-based AI agent harness with a Web UI and automation profiles
 
@@ -233,6 +233,12 @@ PY
 %{_libdir}/deepseek-harness/
 
 %changelog
+* Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.3-1
+- Update to 0.2.2-rc.3
+- Experimental DeepSeek chat import plugin
+- Align upstream_version with the package version (rc.2 still fetched rc.1)
+- Pin pnpm 11.28.5 to match upstream packageManager
+
 * Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.2.2~rc.2-1
 - Update to 0.2.2-rc.2
 - Git worktree review with GitHub review sync, named/multi-level

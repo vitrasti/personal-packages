@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.19.0
+Version:        18.21.0
 Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
@@ -81,6 +81,12 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 18.21.0-1
+- Update to 18.21.0
+- Automatic reasoning detection for unknown models; Modal inference provider
+- Antigravity CLI provider, inline image and web-page embeds
+- AgentSession run lifecycle API change (agent_end / agent_pause)
+
 * Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 18.19.0-1
 - Update to 18.19.0
 - Add Liquid AI provider and judge models (d1.1, d1-ultra)
