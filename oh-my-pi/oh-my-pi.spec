@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.21.0
+Version:        18.22.2
 Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
@@ -81,6 +81,11 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 18.22.2-1
+- Update to 18.22.2
+- Native Kiro provider; Tern plan review editing and comments
+- Disassembler tools moved to the dsm namespace (ida/ghidra settings renamed)
+
 * Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 18.21.0-1
 - Update to 18.21.0
 - Automatic reasoning detection for unknown models; Modal inference provider

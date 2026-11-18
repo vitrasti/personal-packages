@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.11.9
+Version:        2026.11.10
 Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
@@ -80,6 +80,10 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.10-1
+- Update to 2026.11.10
+- mise lock --check for CI, enable_backends allowlist, per-tool musl/glibc builds
+
 * Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.9-1
 - Update to 2026.11.9
 - Task lock pools and tag-based task dependencies, Unix socket sandboxing

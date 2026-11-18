@@ -2,8 +2,8 @@
 # Upstream GitHub tag is v plus the package version.
 
 Name:           hermes-agent
-Version:        0.23.1
-Release:        2%{?dist}
+Version:        0.23.2
+Release:        1%{?dist}
 Summary:        The self-improving AI agent — creates skills from experience, improves them during use, and runs anywhere
 
 License:        MIT
@@ -211,6 +211,12 @@ export HERMES_OPTIONAL_SKILLS=%{buildroot}%{_datadir}/hermes-agent/optional-skil
 %{_libexecdir}/hermes-agent/desktop/
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 0.23.2-1
+- Update to 0.23.2
+- Refresh relax-deps.patch for the truststore comment and pinned wheel
+- Upstream calls this a patch rollup; curated notes ship with 0.24.0
+- Includes durable subagents, hermes fallback check, and Gemini Interactions API
+
 * Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.23.1-2
 - Refresh dependency patch after upstream removed tenacity
 - Refresh Node engines patch for upstream's pnpm migration

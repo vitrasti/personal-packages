@@ -3,7 +3,7 @@
 %global             debug_package %{nil}
 
 Name:               zen-browser
-Version:            1.24.2b
+Version:            1.24.3b
 Release:            1%{?dist}
 Summary:            Zen Browser
 
@@ -68,6 +68,11 @@ gtk-update-icon-cache -f -t %{_datadir}/icons/hicolor
 %{instdir}/
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 1.24.3b-1
+- Update to 1.24.3b
+- Firefox 160.0.1 and MFSA2026-130
+- Fix boost tinting, window leaks, and split-view tabs being unloaded
+
 * Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 1.24.2b-1
 - Update to 1.24.2b
 - Firefox 160.0 and MFSA2026-125; PiP playback speed; MKV with FLAC/MP3/PCM

@@ -9,7 +9,7 @@
 %global jfxver 25.0.3
 
 Name:           cryptomator
-Version:        1.19.6
+Version:        1.19.7
 Release:        1%{?dist}
 Summary:        Multiplatform transparent client-side encryption for cloud storage
 
@@ -177,6 +177,10 @@ update-mime-database %{_datadir}/mime &>/dev/null || :
 %{_datadir}/licenses/%{name}/
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 1.19.7-1
+- Update to 1.19.7
+- Disable JVM Base64 intrinsics, removing the CVE-2026-114938 (Java4Shell) attack surface
+
 * Mon Nov 02 2026 vitrasti <vitrasti@protonmail.com> - 1.19.6-1
 - Update to 1.19.6
 

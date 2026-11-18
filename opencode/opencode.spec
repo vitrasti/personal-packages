@@ -5,7 +5,7 @@
 %global __strip /bin/true
 
 Name:           opencode
-Version:        2.3.0
+Version:        2.3.2
 Release:        1%{?dist}
 Summary:        The open source AI coding agent built for the terminal
 
@@ -74,6 +74,11 @@ chmod 0644 \
 %{_datadir}/zsh/site-functions/_opencode
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 2.3.2-1
+- Update to 2.3.2
+- GPT-6.2 prompt caching; timed-out shell commands stay in the background
+- Background compaction, GPT 6.2 via ChatGPT sign-in, plugin updates in Settings
+
 * Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 2.3.0-1
 - Update to 2.3.0
 - Subagents run in the background by default; quieter TUI transcripts

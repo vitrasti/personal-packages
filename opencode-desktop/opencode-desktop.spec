@@ -11,7 +11,7 @@
 %global instdir %{_prefix}/lib/%{name}
 
 Name:           opencode-desktop
-Version:        2.3.0
+Version:        2.3.2
 Release:        1%{?dist}
 Summary:        OpenCode desktop client for the terminal AI coding agent
 
@@ -107,6 +107,11 @@ test "$(sha256sum < payload/opt/OpenCode/resources/app.asar)" = \
 %{_metainfodir}/ai.opencode.desktop.metainfo.xml
 
 %changelog
+* Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 2.3.2-1
+- Update to 2.3.2
+- GPT-6.2 prompt caching, background compaction, plugin updates from Settings
+- Add comment on selected code in diff and file viewers
+
 * Mon Nov 16 2026 vitrasti <vitrasti@protonmail.com> - 2.3.0-1
 - Update to 2.3.0
 - Background subagents, quieter transcripts, jump-to-message in the desktop app
