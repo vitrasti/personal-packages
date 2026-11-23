@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           pi
-Version:        1.5.2
+Version:        1.6.0
 Release:        1%{?dist}
 Summary:        AI coding agent CLI with read, bash, edit, write tools and session management
 
@@ -74,6 +74,12 @@ ln -s ../%{_lib}/pi/pi %{buildroot}%{_bindir}/pi
 %{_bindir}/pi
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 1.6.0-1
+- Update to 1.6.0
+- GPT-6.2 Astra and GPT-6.2 Sol (Sol now default on openai/azure/openai-codex)
+- Qwen Token Plan: new models and per-plan API key variables
+- Breaking for extensions: render() returns readonly string[]
+
 * Tue Nov 10 2026 vitrasti <vitrasti@protonmail.com> - 1.5.2-1
 - Update to 1.5.2
 

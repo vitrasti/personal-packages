@@ -7,7 +7,7 @@
 %global rustflags_debuginfo 0
 
 Name:           zed
-Version:        1.29.2
+Version:        1.29.3
 Release:        1%{?dist}
 Summary:        High-performance, multiplayer code editor
 
@@ -105,6 +105,11 @@ install -Dm644 %{appid}.metainfo.xml %{buildroot}%{_metainfodir}/%{appid}.metain
 %{_metainfodir}/%{appid}.metainfo.xml
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 1.29.3-1
+- Update to 1.29.3
+- Fix prompt caching for reusable OpenAI system instructions on GPT-6.2+
+- Fix Text Finder showing results of a previous query on no-match searches
+
 * Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 1.29.2-1
 - Update to 1.29.2
 - Git Panel branch mode, bookmark picker, configurable Git date formats

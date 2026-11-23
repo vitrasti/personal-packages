@@ -3,7 +3,7 @@
 %global __strip /bin/true
 
 Name:           oh-my-pi
-Version:        18.22.2
+Version:        19.1.1
 Release:        1%{?dist}
 Summary:        Terminal coding agent with code intelligence and native tools
 
@@ -81,6 +81,12 @@ test -s %{buildroot}%{_datadir}/fish/vendor_completions.d/omp.fish
 %{_datadir}/fish/vendor_completions.d/omp.fish
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 19.1.1-1
+- Update to 19.1.1
+- Guard oversized handoffs against the model context window
+- Fix speculative tool calls hanging when discarded or aborted
+- Devin: quota-aware account selection, billing failures treated as usage limits
+
 * Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 18.22.2-1
 - Update to 18.22.2
 - Native Kiro provider; Tern plan review editing and comments

@@ -3,7 +3,7 @@
 # access during builds).
 
 Name:           bitwarden
-Version:        2026.10.4
+Version:        2026.11.0
 Release:        1%{?dist}
 Summary:        Bitwarden Desktop
 License:        GPL-3.0-only
@@ -45,10 +45,10 @@ This package relocates the official Electron bundle from /opt/Bitwarden to
 and other immutable Fedora variants.
 
 %prep
-curl -L -o bitwarden.rpm "https://github.com/bitwarden/clients/releases/download/desktop-v%{version}/Bitwarden-%{version}-x86_64.rpm"
+curl -L -o bitwarden.rpm "https://github.com/bitwarden/clients/releases/download/desktop-v%{version}/bit-Bitwarden-%{version}-x86_64.rpm"
 # Pin the upstream RPM checksum. Update this on every version bump
 # (sha256sum Bitwarden-%{version}-x86_64.rpm).
-echo "09abe8983dc493e107e9ae6f7b3f164cf58141cf4e74456611d7200d514576fd  bitwarden.rpm" | sha256sum -c -
+echo "66c3be26c25b5353430722b1858e946fcfd7a2f53d3b2ca7a087319a67d51122  bitwarden.rpm" | sha256sum -c -
 
 %install
 mkdir -p %{buildroot}
@@ -84,6 +84,12 @@ chmod 4755 %{buildroot}%{instdir}/chrome-sandbox
 %{_datadir}/icons/hicolor/*/apps/bitwarden.png
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.0-1
+- Update to 2026.11.0
+- Update pinned sha256 checksum for upstream RPM
+- Upstream renamed desktop download files with a license prefix
+  (bit-Bitwarden-<v>-x86_64.rpm); update the Source URL accordingly
+
 * Fri Nov 06 2026 vitrasti <vitrasti@protonmail.com> - 2026.10.4-1
 - Update to 2026.10.4
 - Update pinned sha256 checksum for upstream RPM

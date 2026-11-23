@@ -5,7 +5,7 @@
 %global __strip /bin/true
 
 Name:           opencode
-Version:        2.3.2
+Version:        2.4.0
 Release:        1%{?dist}
 Summary:        The open source AI coding agent built for the terminal
 
@@ -74,6 +74,13 @@ chmod 0644 \
 %{_datadir}/zsh/site-functions/_opencode
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 2.4.0-1
+- Update to 2.4.0
+- Built-in desktop browser with imported sign-ins, history, and extensions
+- Automations: scheduled/on-event prompts, scripts, and shell commands (/automation)
+- generate_video tool, new TUI design (opencode-classic theme for the old look)
+- Note: experimental_image_generate renamed to generate_image
+
 * Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 2.3.2-1
 - Update to 2.3.2
 - GPT-6.2 prompt caching; timed-out shell commands stay in the background

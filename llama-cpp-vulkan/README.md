@@ -1,15 +1,22 @@
 # llama-cpp-vulkan
 
-Source-built llama.cpp 0.8.0 for Fedora x86_64, with Vulkan, portable CPU
+Source-built llama.cpp 0.9.0 for Fedora x86_64, with Vulkan, portable CPU
 backends, and `llama-server` with its embedded Web UI. Intel Vulkan drivers
 (`mesa-vulkan-drivers`) are required by the RPM.
 
 ## COPR build
 
 Use `llama-cpp-vulkan.spec` with a Fedora chroot matching the Fedora release
-in your CoreOS image. Enable **buildroot network access**: the Web UI uses
-`npm ci` with the upstream release's lockfile. No Node.js/npm is needed at
-runtime. CMake's automatic Web UI downloads are disabled.
+in your CoreOS image. Enable **buildroot network access**: `%build` runs
+`npm ci` against the upstream lockfile to collect Web UI dependency license
+notices. No Node.js/npm is needed at runtime. CMake's automatic Web UI
+downloads are disabled.
+
+The Web UI is not compiled on COPR. Those builders allow 2048 MiB, and the
+0.8.0 `vite build` exceeds that (`JavaScript heap out of memory`). The spec
+embeds `llama-b<build>-ui.tar.gz` from the matching llama.cpp release. When
+bumping llama.cpp, update `llama_build_number`, `llama_build_commit`, and
+`ui_sha256` together.
 
 The package conflicts with `llama-cpp`, which owns the same commands.
 

@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name:           mise
-Version:        2026.11.10
+Version:        2026.11.12
 Release:        1%{?dist}
 Summary:        Dev tools, env vars, and tasks in one CLI
 
@@ -80,6 +80,11 @@ TOML
 %{_prefix}/lib/mise/mise-self-update-instructions.toml
 
 %changelog
+* Mon Nov 23 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.12-1
+- Update to 2026.11.12
+- mise audit and mise upgrade --vulnerable (OSV.dev advisory checks)
+- mise prune --system, per-tool bump = false, more flexible dotfile groups
+
 * Wed Nov 18 2026 vitrasti <vitrasti@protonmail.com> - 2026.11.10-1
 - Update to 2026.11.10
 - mise lock --check for CI, enable_backends allowlist, per-tool musl/glibc builds
