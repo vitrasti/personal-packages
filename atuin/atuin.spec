@@ -29,9 +29,6 @@ Summary:        Magical shell history
 License:        MIT
 URL:            https://github.com/atuinsh/atuin
 Source0:        %{url}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
-# Profile.d init script for the all-users subpackage (adapted from the
-# official Fedora package).
-Source1:        atuin.sh.in
 
 Requires:       bash-preexec
 
@@ -40,9 +37,11 @@ BuildRequires:  cargo >= 1.95
 BuildRequires:  rust >= 1.95
 # C compiler for tree-sitter (bundled C), zstd-sys, and linking.
 BuildRequires:  gcc
+# C++ compiler for mlua-sys (bundled Luau interpreter).
+BuildRequires:  g++
 # System libraries linked at runtime or during the build.
 BuildRequires:  pkgconfig(openssl)
-BuildRequires:  pkgconfig(libsqlite3)
+BuildRequires:  pkgconfig(sqlite3)
 # arboard (clipboard) on Linux uses wayland-data-control.
 BuildRequires:  pkgconfig(wayland-client)
 
@@ -82,8 +81,31 @@ done
 
 # Generate the profile.d script for the all-users subpackage.
 mkdir -p other_installs/profile.d
-sed "s|@ATUIN_SCRIPTS_DIR@|%{_libexecdir}/%{name}|" %{SOURCE1} \
-    > other_installs/profile.d/atuin.sh
+cat > other_installs/profile.d/atuin.sh << EOF
+# atuin initialization script for all users
+# Currently only bash and zsh is supported
+
+# Check for bash environment
+if [ -n "\${BASH_VERSION-}" ]; then
+  # Skip noninteractive shells.
+  [[ \$- != *i* ]] && return
+
+  # Use the statically written atuin init script
+  source %{_libexecdir}/%{name}/atuin-init.bash
+
+# Check for zsh environment
+elif [ -n "\${ZSH_VERSION-}" ]; then
+  # Skip noninteractive shells.
+  [[ \$- != *i* ]] && return
+
+  # The /etc/zprofile script calls 'emulate -L ksh', to make zsh
+  # happier when sourcing files in /etc/profile.d. However, atuin
+  # needs some zsh-specific functions (i.e. compinit), so we emulate
+  # zsh when sourcing the statically written atuin init script. See
+  # /etc/zprofile or 'man zshbuiltins' for more details.
+  emulate zsh -c "source %{_libexecdir}/%{name}/atuin-init.zsh"
+fi
+EOF
 
 %install
 install -Dpm 0755 target/release/%{name} %{buildroot}%{_bindir}/%{name}

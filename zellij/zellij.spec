@@ -2,7 +2,7 @@
 %undefine _package_note_file
 
 Name: zellij
-Version: 0.46.0
+Version: 0.46.1
 Release: 1%{?dist}
 Summary: A terminal workspace with batteries included
 
@@ -56,6 +56,9 @@ rm -f %{buildroot}%{_prefix}/.crates.toml \
 %{_bindir}/%{name}
 
 %changelog
+* Tue Nov 24 2026 vitrasti <vitrasti@protonmail.com> - 0.46.1-1
+- Update to 0.46.1
+
 * Thu Nov 12 2026 vitrasti <vitrasti@protonmail.com> - 0.46.0-1
 - Update to 0.46.0
 - Zellij can now also run as a standalone desktop terminal (`zellij terminal`)
