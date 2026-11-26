@@ -15,6 +15,9 @@
 %global goipath         github.com/rfjakob/gocryptfs/v2
 Version:                2.7.0
 
+# Top-level directory name inside the src-deps release tarball
+%define topdir gocryptfs_v%{version}_src-deps
+
 %gometa -L -f
 
 Name:           gocryptfs
