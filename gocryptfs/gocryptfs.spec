@@ -1,9 +1,9 @@
 %global debug_package %{nil}
 
 # Based on the official Fedora spec (go2rpm-generated). Adapted for Fedora
-# CoreOS / rpm-ostree: everything is installed under /usr (binaries in
-# %{_bindir}, man pages in %{_mandir}), so the package layers cleanly on
-# immutable Fedora where /opt is a symlink to /var/opt.
+# CoreOS / rpm-ostree: everything is installed under /usr (bindir and man
+# pages), so the package layers cleanly on immutable Fedora where /opt is
+# a symlink to /var/opt.
 %bcond check 1
 
 %global gomodulesmode GO111MODULE=on
